@@ -35,12 +35,40 @@
  var obj1 = 10
  function changeObj (obj) {
    obj = 20
+   return obj
  }
- changeObj(obj1)
+ let obj2 = changeObj(obj1)
+ console.log(obj2)
  console.log(obj1)
 
 我答20，我信誓旦旦的说，obj = 20改变了外面obj1的值 结果错了。。。
 呜呜 应该是10，看来我这块知识不行
+
+解答：
+function test(person) {
+  person.age = 26
+  person = {
+    name: 'yyy',
+    age: 30
+  }
+
+  return person
+}
+const p1 = {
+  name: 'yck',
+  age: 25
+}
+const p2 = test(p1)
+console.log(p1) // -> {name: 'yck', age: 26}
+console.log(p2) // -> {name: 'yyy', age: 30}
+对于以上代码，你是否能正确的写出结果呢？接下来让我为你解析一番：
+
+首先，函数传参是传递对象指针的副本
+到函数内部修改参数的属性这步，我相信大家都知道，当前 p1 的值也被修改了
+但是当我们重新为 person 分配了一个对象时就出现了分歧，请看下图
+
+所以最后 person 拥有了一个新的地址（指针），也就和 p1 没有任何关系了，导致了最终两个变量的值是不相同的。
+
 
  问第3题是怎么画出三角形的，圆环如何用一个div画出来；
  问第5题的思路；
