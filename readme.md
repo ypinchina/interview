@@ -91,6 +91,14 @@
     typeof console.log // 'function'
 
 14. js的继承方式
+    
+    首先先来讲下 class，其实在 JS 中并不存在类，class 只是语法糖，本质还是函数。
+    class Person {}
+    Person instanceof Function // true
+
+    原型链继承
+
+    
 15. Vue数据传递方式
 16. let var const的区别
     从变量声明提升这块： var允许变量提升，（使用 var 声明的变量会被提升到作用域的顶部），后两者在变量声明之前使用的话，
@@ -106,7 +114,7 @@
 
     额外总结：函数提升优先于变量提升，函数提升会把整个函数挪到作用域顶部，变量提升只会把声明挪到作用域顶部
               var 存在提升，我们能在声明之前使用。let、const 因为暂时性死区的原因，不能在声明前使用
-
+              var 在全局作用域下声明变量会导致变量挂载在 window 上，其他两者不会
 17. 请你说一下vue里面provide和inject两个配置项
 vue提供了provide和inject帮助我们解决多层次嵌套嵌套通信问题。
 在provide中指定要传递给子孙组件的数据，子孙组件通过inject注入祖父组件传递过来的数据。
