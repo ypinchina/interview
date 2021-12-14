@@ -32,12 +32,7 @@
     4、  400客户端语法错误 403服务器理解请求，但拒绝该请求  404请求不到资源
     5、 500服务器端问题 503服务器维护或者超载
 
-6. 箭头函数有什么好处与不同
-答： 
-1、书写简洁
-2、不会改变this的指向
-
-7. this的指向有几种
+1. this的指向有几种
   答：
   1. 严格模式下 this的指向为undefined
   2. 非严格模式下全局作用域指向window
@@ -71,20 +66,19 @@
 
     使用闭包时，按照作用域链的特点，闭包（函数）外面的变量不会被销毁，因为函数会一直被调用，所以一直存在，如果闭包使用过多会造成内存销毁。
 12. 什么是event loop
+  
+    所以 Event Loop 执行顺序如下所示：
 
+    首先执行同步代码，这属于宏任务
+    当执行完所有同步代码后，执行栈为空，查询是否有异步代码需要执行
+    执行所有微任务
+    当执行完所有微任务后，如有必要会渲染页面
+    然后开始下一轮 Event Loop，执行宏任务中的异步代码，也就是 setTimeout 中的回调函数
+    微任务包括 process.nextTick ，promise ，MutationObserver。
 
-  所以 Event Loop 执行顺序如下所示：
+    宏任务包括 script ， setTimeout ，setInterval ，setImmediate ，I/O ，UI rendering。
 
-  首先执行同步代码，这属于宏任务
-  当执行完所有同步代码后，执行栈为空，查询是否有异步代码需要执行
-  执行所有微任务
-  当执行完所有微任务后，如有必要会渲染页面
-  然后开始下一轮 Event Loop，执行宏任务中的异步代码，也就是 setTimeout 中的回调函数
-  微任务包括 process.nextTick ，promise ，MutationObserver。
-
-  宏任务包括 script ， setTimeout ，setInterval ，setImmediate ，I/O ，UI rendering。
-
-  这里很多人会有个误区，认为微任务快于宏任务，其实是错误的。因为宏任务中包括了 script ，浏览器会先执行一个宏任务，接下来有异步代码的话才会先执行微任务。
+    这里很多人会有个误区，认为微任务快于宏任务，其实是错误的。因为宏任务中包括了 script ，浏览器会先执行一个宏任务，接下来有异步代码的话才会先执行微任务。
 
 13. js的数据类型
 
@@ -210,3 +204,33 @@ Promise也有一些缺点。首先，无法取消Promise，一旦新建它就会
       let value = await sleep()
     }
     async函数就是将 Generator 函数的星号（*）替换成async，将yield替换成await，仅此而已
+22. post和get的区别
+    
+    1.get是获取数据的，而post是提交数据的,只是它们的语义不同而已
+
+    2.GET 用于获取信息，是无副作用的，是幂等的，且可被浏览器缓存， 而POST 用于修改服务器上的数据，有副作用，非幂等，不可被浏览器缓存。
+
+    3.get使用url传参，post一般使用form表单传参，必要时post也可以使用url传参
+
+    4.get提交的数据有长度限制，post请求没有内容长度限制，http协议本身没有限制url及正文长度，对url的限制一般是浏览器和服务器的原因
+
+    5.post请求比get请求较为安全一些，get参数放在url中，但是http请求都是明文传输，post依旧可以被抓包。仅有用https安全一些，
+    get请求会将url请求保存在浏览器历史记录里，这样就没post安全
+23. background-position: x y    0 0 代表左上角，5px -10px代表向右偏移5px,向上偏移10px
+    
+24. box-sizing的默认值： content-box(盒子的高度是独立的,就为height)， border-box(盒子的高度是要加入border宽度和padding的值，即盒子内容的高度 =  height - border-width * 2 - padding-top - padding-bottom)
+    
+25. 箭头函数和普通函数有何不同
+
+    1.箭头函数只能写在匿名函数中，仅是函数表达式的情况。 普通函数则没这个限制，可以是函数声明也可以是函数表达式
+    2.箭头函数不能用new来创建构造函数的实例，普通函数可以（因为箭头函数创建的时候程序不会为它创建construct方法，也就是没有构造能力，用完就丢掉了，不像普通函数重复利用，因此也不需要构造函数原型，也就是不会自动生成prototype属性）
+    3.箭头函数的this与上级上下文作用域的this保持一致，普通函数中的this，指向调用这个函数的对象
+    4.arguments的不同，箭头函数没有arguments对象
+    5.箭头函数不能通过bind、call、apply来改变this的值，但依然可以调用这几个方法（只是this的值不受这几个方法控制）
+    6.箭头函数没有super()和new.target的绑定。普通函数有
+26. http和https
+27. http1.0 1.1和2.0
+28. tcp和udp
+29. 三次握手
+30. 四次挥手
+31. BFC是什么

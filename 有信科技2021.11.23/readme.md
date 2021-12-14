@@ -1,6 +1,7 @@
 先笔试后面试
  笔试题节选：
  1. background-position 5px -10px代表什么
+     background-position: x y    0 0 代表左上角，5px -10px代表向右偏移5px,向上偏移10px
  2. for(var i = 0; i < 4; i++) {
    setTimeout(function() {
      console.log(i)
