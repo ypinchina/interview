@@ -78,7 +78,9 @@
     class Person {}
     Person instanceof Function // true
 
-    原型链继承
+    原型链继承,分为组合继承和寄生组合继承
+
+    什么是原型链？什么是原型链继承
 
     
 15. Vue数据传递方式
@@ -253,6 +255,7 @@ Promise也有一些缺点。首先，无法取消Promise，一旦新建它就会
         这个属性对应一个函数对象，就是当前调用的arguments所在对象
 
 36.  什么是闭包
+    
     函数嵌套函数，内部的函数就是闭包(函数A嵌套函数B，B函数能访问函数A，则函数B则被称为闭包)。
     在 JS 中，闭包存在的意义就是让我们可以间接访问函数内部的变量。
     三、闭包作用
@@ -286,3 +289,31 @@ Promise也有一些缺点。首先，无法取消Promise，一旦新建它就会
     宏任务包括 script ， setTimeout ，setInterval ，setImmediate ，I/O ，UI rendering。
 
     这里很多人会有个误区，认为微任务快于宏任务，其实是错误的。因为宏任务中包括了 script ，浏览器会先执行一个宏任务，接下来有异步代码的话才会先执行微任务。
+
+38. call, apply, bind的作用和区别
+    
+    call与apply都属于Function.prototype的一个方法，所以每个function实例都有call、apply属性；
+
+    作用
+    call（）方法和apply（）方法的作用相同：改变this指向。
+
+    区别
+    他们的区别在于接收参数的方式不同：
+
+    call（）：第一个参数是this值没有变化，变化的是其余参数都直接传递给函数。在使用call（）方法时，传递给函数的参数必须逐个列举出来。
+
+    apply（）：传递给函数的是参数数组
+
+    apply 转化的是内置的 call，并非 Function.prototype.call，apply 最后还是转化成 call 来执行的，call 要更快毫无疑问
+
+    bind(), bind不会马上调用 可以存在返回的对象里，合适的时候在调用，call和apply都是马上调用，bind的参数列表和call一样
+39. new()一个新对象，底层做了什么
+    
+   new一个函数，JS编译器会做的四件事情：
+                                              
+    1.创建一个新的空的对象
+    2.将构造函数的作用域赋给新对象（因此this就指向了这个新对象）
+    3.执行构造函数中的代码（为这个新对象添加属性）
+    4.如果这个函数有返回值，则返回；否则，就会默认返回新对象
+
+    
