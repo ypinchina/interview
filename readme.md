@@ -351,14 +351,14 @@ Promise也有一些缺点。首先，无法取消Promise，一旦新建它就会
 
     2.jsonp解决跨域
 
-      JSONP 的原理很简单，就是利用 <script> 标签没有跨域限制的漏洞。通过 <script> 标签指向一个需要访问的地址并提供一个回调函数来接收数据当需要通讯时。
+      JSONP 的原理很简单，就是利用 "script" 标签没有跨域限制的漏洞。通过 "script" 标签指向一个需要访问的地址并提供一个回调函数来接收数据当需要通讯时。
 
-    <script src="http://domain/api?param1=a&param2=b&callback=jsonp"></script>
-    <script>
+    'script src="http://domain/api?param1=a&param2=b&callback=jsonp"  /script'
+    script
         function jsonp(data) {
           console.log(data)
       }
-    </script>    
+    /script    
     JSONP 使用简单且兼容性不错，但是只限于 get 请求。
 
     3.cors 后端服务器放行解决跨域
@@ -366,7 +366,85 @@ Promise也有一些缺点。首先，无法取消Promise，一旦新建它就会
       该属性表示哪些域名可以访问资源，如果设置通配符（*）则表示所有网站都可以访问资源。
       以前自己用node后台写过一个博客管理系统的全栈项目里面使用ngixn在配置文件config里面修改过
     4.proxy代理
+      vue.config.js里配置proxy代理，利用webpack-dev-server 起本地前端的服务，因此 proxyTable 实际上是将请求发给自己的服务器，再由服务器转发给后台服务器，做了一层代理。vue的proxyTable用的是http-proxy-middleware中间件, 因此不会出现跨域问题。
 
   42. 项目中遇到难解决的问题
+    在杭州那个主要的项目中，需要实现文件分享，在上传组件中有个批量上传看到各个文件的上传进度条的功能。
+    因为使用input type= file上传时可以直接拿到对于file对象，我就在每个file对象中加入progress属性值，
+    然后上传期间xmlHttpRequest对象可以算出上传的百分比的值我就重新写到file对象的progress中，但是发现
+    没有更新进度条，打印出来的值也是对的。然后用了很多方法比如加$set等。还是无济于事。 这个问题困扰了接近两周，去网上找了各种答案，期间去处理别的问题去了。后来换个很多种搜索博客问题的方式，才找到一篇博客，
+    他也是有过类似的问题。原来 files 是 FileList 类型，file 是 File 类型。而普通的 obj 是 Object 类型。
+
+    Vue 的数据更新利用的是 Object.defineProperty 的 getter setter 函数来实现的，而 Vue 默认没有对 File 对象设置 getter setter, 因此用 File 对象不会自动更新。
+
+    解决办法，就是用普通对象保存 file 对象里需要的信息，然后用来构造视图数据。或者自己手动设置 File 对象的 setter，也可以自动更新
     
+  43. 浏览器存储
+    针对cookie、localStorage、sessionStorage,indexDB
+    对于与服务端通信这方面： 
+      只有cookie有对服务端的通信，每次都会携带在 header 中，对于请求性能影响，其他三者不会。导致使用cookies会占用一部分带宽
+    对于存储量大小来说：
+      cookie为4KB，  两个storage为5M, indexDB为无限
+    对于数据生命周期：
+      cookies一般由服务器生成，可以设置过期时间, localStorage和indexDB永久存在除非手动清除，sessionStorage是关闭页面就清除
       
+    Service Worker
+      Service Worker 是运行在浏览器背后的独立线程，一般可以用来实现缓存功能。
+      使用 Service Worker的话，传输协议必须为 HTTPS。因为 Service Worker 中涉及到请求拦截，所以必须使用 HTTPS 协议来保障安全。F12中Application中能看到Service Worker
+  
+  44. vue中的mixin和mixins有什么区别
+    mixin 用于全局混入，会影响到每个组件实例，通常插件都是这样做初始化的。
+
+    Vue.mixin({
+        beforeCreate() {
+            // ...逻辑
+            // 这种方式会影响到每个组件的 beforeCreate 钩子函数
+        }
+    })
+    虽然文档不建议我们在应用中直接使用 mixin，但是如果不滥用的话也是很有帮助的，比如可以全局混入封装好的 ajax 或者一些工具函数等等。
+
+    import 待混入的对象 from ../待混入的对象.js
+    mixins是选择性混入 在组件中写 mixins: [待混入的对象]
+
+    1.组件的data，methods优先级高于mixins里面的data,methods
+    2.生命周期函数先执行mixins里的再执行组件里的
+    Mixins：则是在引入组件之后与组件中的对象和方法进行合并，相当于扩展了父组件的对象与方法，可以理解为形成了一个新的组件。
+  
+  45. vue3的一些笔记：
+    
+    etup()在vue实例完全初始化之前执行，取不到this实例
+
+    1.ref和react方法 都能把非双向数据绑定的数据变双向数据绑定的数据，都是利用proxy对象转成双向数据绑定的对象proxy((key, value: ''))。两者区别是ref作用于基本数据类型，后者作用于非基础数据类型
+
+    为了取响应式对象里的key-value 普通解构出来的属性是没有响应式的，即使用react对象包裹， 需要使用toRefs包裹才可以赋予解构的响应式。即在原来的proxy({name: 'Yip'})前 套上 toRefs({name: proxy({name: 'Yip})})
+
+    2.toRefs 与 toRef的区别
+
+    toRefs 用于将响应式对象转换为结果对象，其中结果对象的每个属性都是指向原始对象相应属性的ref。常用于es6的解构赋值操作，因为在对一个响应式对象直接解构时解构后的数据将不再有响应式，而使用toRefs可以方便解决这一问题。
+
+    ·获取数据值的时候需要加.value
+    ·toRefs后的ref数据不是原始数据的拷贝，而是引用，改变结果数据的值也会同时改变原始数据
+    作用其实和 toRef 类似，只不过 toRef 是一个个手动赋值，而    ·toRefs 是自动赋值。
+
+    3.watch和watchEffect的区别
+    ·watch在生命周期开始第一次不执行（watch的惰性）；watch对象需要传待监听的对象的值；能获取新旧值
+    ·watchEffect立即执行；传参只传入回调函数；不能获取到旧的值
+  
+  46. vue的生命周期
+    进入beforeCreate 时，是获取不到 props 或者 data 中的数据的，因为这些数据的初始化都在 initState (源码)中。
+    进入created 钩子，可以获取props和data里数据，组件还没被挂载，所以是看不到的
+    进入beforeMount，开始构建Virtual DOM,
+    进入mounted,将 Virtual DOM 渲染为真实 DOM 并且渲染数据
+
+    beforeUpdate和updated()，是更新前和更新后的钩子
+
+    还有两个特殊的生命周期钩子： activated和 deactivated   ，用 keep-alive标签 包裹的组件在切换时不会进行销毁，而是缓存到内存中并执行 deactivated 钩子函数，命中缓存渲染后会执行 actived 钩子函数。
+    
+  47. keep-alive 组件有什么作用
+    如果你需要在组件切换的时候，保存一些组件的状态防止多次渲染，就可以使用 keep-alive 组件包裹需要保存的组件。
+    <keep-alive :include="whiteList" :exclude="blackList" :max="amount">
+     <component :is="currentComponent"></component>
+    </keep-alive>
+    include定义缓存白名单，keep-alive会缓存命中的组件；exclude定义缓存黑名单，被命中的组件将不会被缓存；max定义缓存组件上限，超出上限使用LRU的策略置换缓存数据。
+
+    内存管理的一种页面置换算法，对于在内存中但又不用的数据块（内存块）叫做LRU，操作系统会根据哪些数据属于LRU而将其移出内存而腾出空间来加载另外的数据。
