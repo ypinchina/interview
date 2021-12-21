@@ -3,7 +3,7 @@ Function.prototype.myCall = function(context) {
   context = context || globalThis
   const arr = [...arguments].splice(1)
   context.fn = this
-  const result = context.fn(...arr)
+  const result = arguments.length > 1 ? context.fn(...arr) :context.fn()
   delete context.fn
   return result
 }
@@ -19,7 +19,7 @@ const objectTest = {
 
 const myresult = add.myCall()
 
-
+// 手写apply方法
 Function.prototype.myApply = function(context) {
   context = context || globalThis
   context.fn = this
@@ -28,4 +28,4 @@ Function.prototype.myApply = function(context) {
   return result
 }
 
-add.myApply(objectTest, [10, 20])
+console.log(add.myApply(objectTest, [10, 20]))
