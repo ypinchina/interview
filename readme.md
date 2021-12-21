@@ -30,7 +30,7 @@
     1、 101 客户端需要继续发送剩余请求
     2、 200 成功
     3、 301 永久重定向转移，url转移到别的地址 302暂时重定向转移 304缓存，服务器已经执行了get请求，文件未发生变化
-    4、  400客户端语法错误 403服务器理解请求，但拒绝该请求  404请求不到资源
+    4、 400客户端语法错误 403服务器理解请求，但拒绝该请求  404请求不到资源
     5、 500服务器端问题 503服务器维护或者超载
 
 6. this的指向有几种
@@ -89,8 +89,7 @@
     3.兄弟组件之间使用中央集成总线的方式传递数据，
     4.在vue2.2版本之后，新增了provide和inject。用于父组件给子或子孙组件传递数据
     5.使用Vuex
-    6.使用插槽
-    7.$children $parents
+    6.$children $parents
 
 16. let var const的区别
     从变量声明提升这块： var允许变量提升，（使用 var 声明的变量会被提升到作用域的顶部），后两者在变量声明之前使用的话，
@@ -223,7 +222,7 @@ Promise也有一些缺点。首先，无法取消Promise，一旦新建它就会
 30. 四次挥手
     
 31. BFC是什么
-    
+    指的是块级格式化上下文（block formating context），w3c原意是指
 32. 父子组件之间的加载过程  
 答： 先进入父组件的beforeCreated;  
     然后进入父组件的created;  
@@ -306,7 +305,7 @@ Promise也有一些缺点。首先，无法取消Promise，一旦新建它就会
 
     apply 转化的是内置的 call，并非 Function.prototype.call，apply 最后还是转化成 call 来执行的，call 要更快毫无疑问
 
-    bind(), bind不会马上调用 可以存在返回的对象里，合适的时候在调用，call和apply都是马上调用，bind的参数列表和call一样
+    bind(), bind不会马上调用 可以存在返回的对象里，合适的时候在调用，call和apply都是马上调用，bind的参数列表和call一样，都是bind(this, a , b , c.....)
 
 39. new()一个新对象，底层做了什么
     
@@ -439,7 +438,7 @@ Promise也有一些缺点。首先，无法取消Promise，一旦新建它就会
     beforeUpdate和updated()，是更新前和更新后的钩子
 
     还有两个特殊的生命周期钩子： activated和 deactivated   ，用 keep-alive标签 包裹的组件在切换时不会进行销毁，而是缓存到内存中并执行 deactivated 钩子函数，命中缓存渲染后会执行 actived 钩子函数。
-    
+
   47. keep-alive 组件有什么作用
     如果你需要在组件切换的时候，保存一些组件的状态防止多次渲染，就可以使用 keep-alive 组件包裹需要保存的组件。
     <keep-alive :include="whiteList" :exclude="blackList" :max="amount">
