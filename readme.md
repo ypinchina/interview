@@ -106,6 +106,7 @@
     额外总结：函数提升优先于变量提升，函数提升会把整个函数挪到作用域顶部，变量提升只会把声明挪到作用域顶部
               var 存在提升，我们能在声明之前使用。let、const 因为暂时性死区的原因，不能在声明前使用
               var 在全局作用域下声明变量会导致变量挂载在 window 上，其他两者不会
+
 17. 请你说一下vue里面provide和inject两个配置项
 vue提供了provide和inject帮助我们解决多层次嵌套嵌套通信问题。
 在provide中指定要传递给子孙组件的数据，子孙组件通过inject注入祖父组件传递过来的数据。
@@ -210,6 +211,8 @@ Promise也有一些缺点。首先，无法取消Promise，一旦新建它就会
     4.arguments的不同，箭头函数没有arguments对象
     5.箭头函数不能通过bind、call、apply来改变this的值，但依然可以调用这几个方法（只是this的值不受这几个方法控制）
     6.箭头函数没有super()和new.target的绑定。普通函数有
+    7.综合箭头函数没有.protypeto 属性
+    8.箭头函数不能当做Generator函数,不能使用yield关键字
 
 26. http和https
     
@@ -446,4 +449,59 @@ Promise也有一些缺点。首先，无法取消Promise，一旦新建它就会
     </keep-alive>
     include定义缓存白名单，keep-alive会缓存命中的组件；exclude定义缓存黑名单，被命中的组件将不会被缓存；max定义缓存组件上限，超出上限使用LRU的策略置换缓存数据。
 
-    内存管理的一种页面置换算法，对于在内存中但又不用的数据块（内存块）叫做LRU，操作系统会根据哪些数据属于LRU而将其移出内存而腾出空间来加载另外的数据。
+  48. callee和caller
+       callee译名被呼叫者，caller译名呼叫者
+      callee是arguments的属性，用于获取当前的方法，可以用于递归调用时方法名被修改的情况;也可以获取当前
+      匿名方法
+        function fibonacci (n) {
+          if (n === 1 || n === 2) {
+            return 1
+          } else if (n < 1) {
+            return '请传入非0自然数'
+          } else {
+            return arguments.callee(n - 1) + arguments.callee(n - 2)
+          }
+        }
+        fibonacci(7)
+        caller写在方法里，用于得到是谁在调用本方法,如果是全局调用此方法 'functionName'.caller返回null
+        function b() {
+          a()
+          function a() {
+            console.log(a.caller)
+            // 亦可写作 console.log(arguments.callee.caller)
+          }
+        }
+        b() // 输出function b() {}
+  49.  0.1 + 0.2 = ? 结果如何，为什么，如何纠正?
+    
+      0.1 在二进制中是无限循环的一些数字，其实不只是 0.1，其实很多十进制小数用二进制表示都是无限循环的。这样其实没什么问题，但是 JS 采用的浮点数标准却会裁剪掉我们的数字。
+
+      javascript是使用 IEEE 754双精度的格式，双精度小数转二级制会丢失精度 计算完再转回十进制得到的结果
+      和理论值不同所以会造车这个问题，只要是使用IEEE 754规范的语言都会有这个问题，比如python java go,
+
+      0.1 = 0.10000000000000002
+      0.2 = 0.20000000000000002
+      0.1 + 0.2 = 0.30000000000000004 != 0.3
+      parseFloat((0.1 + 0.2).toFixed(10)) === 0.3 // true
+
+  50. webpack的loader是什么plugins是什么，两者有什么区别？  
+        Loader：
+        用于对模块源码的转换，loader 描述了 webpack 如何处理非 javascript 模块，并且在 build 中引入这些依赖。loader 可以将文件从不同的语言（如 TypeScript）转换为 JavaScript，或者将内联图像转换为 data URL。比如说：CSS-Loader，Style-Loader 等。
+        Plugin
+        目的在于解决 loader 无法实现的其他事,它直接作用于 webpack，扩展了它的功能。在 webpack 运行的生命周期中会广播出许多事件，plugin 可以监听这些事件，在合适的时机通过 webpack 提供的 API 改变输出结果。插件的范围包括，从打包优化和压缩，一直到重新定义环境中的变量。插件接口功能极其强大，可以用来处理各种各样的任务。
+
+  51. 优先级： v-once > v-for > v-if
+    
+  52. css 优先级是怎么计算的
+    
+    第一优先级：!important 会覆盖页面内任何位置的元素样式
+    1.内联样式，如 style="color: green"，权值为 1000
+    2.ID 选择器，如#app，权值为 0100
+    3.类、伪类、属性选择器，如.foo, :first-child, div[class="foo"]，权值为 0010
+    4.标签、伪元素选择器，如 div::first-line，权值为 0001
+    5.通配符、子类选择器、兄弟选择器，如*, >, +，权值为 0000
+    6.继承的样式没有权值
+
+ ##性能优化
+  53. 什么是防抖，什么是节流。应用场景有哪些？手写防抖和节流？
+  54. 什么是重绘和回流，阻止的方法有什么

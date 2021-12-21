@@ -1,1 +1,0 @@
-// 原理 使用setTimeout和闭包
