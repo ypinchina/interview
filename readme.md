@@ -225,7 +225,9 @@ Promise也有一些缺点。首先，无法取消Promise，一旦新建它就会
 30. 四次挥手
     
 31. BFC是什么
+    
     指的是块级格式化上下文（block formating context），w3c原意是指
+
 32. 父子组件之间的加载过程  
 答： 先进入父组件的beforeCreated;  
     然后进入父组件的created;  
@@ -241,8 +243,38 @@ Promise也有一些缺点。首先，无法取消Promise，一旦新建它就会
     2.vue组件中的data数据都应该是相互隔离，互不影响的，组件每复用一次，data数据就应该被复制一次，之后，当某一处复用的地方组件内data数据被改变时，其他复用地方组件的data数据不受影响，就需要通过data函数返回一个对象作为组件的状态。
 
     3.当我们将组件中的data写成一个函数，数据以函数返回值形式定义，这样每复用一次组件，就会返回一份新的data，拥有自己的作用域，类似于给每个组件实例创建一个私有的数据空间，让各个组件实例维护各自的数据。
-34. flex
+
+34. flex是什么？  
+    flex 是 Flexible Box 的缩写，意为"弹性布局"，用来为盒状模型提供最大的灵活性
+
+    flex 1是什么含义？
+
+    flex属性 是 flex-grow、flex-shrink、flex-basis三个属性的缩写。
+
+    推荐使用此简写属性，而不是单独写这三个属性。
+
     
+
+    flex-grow：定义项目的的放大比例；
+
+            默认为0，即 即使存在剩余空间，也不会放大；
+          所有项目的flex-grow为1：等分剩余空间（自动放大占位）；
+            flex-grow为n的项目，占据的空间（放大的比例）是flex-grow为1的n倍。
+            
+
+    flex-shrink：定义项目的缩小比例；
+
+            默认为1，即 如果空间不足，该项目将缩小；
+            所有项目的flex-shrink为1：当空间不足时，缩小的比例相同；
+            flex-shrink为0：空间不足时，该项目不会缩小；
+            flex-shrink为n的项目，空间不足时缩小的比例是flex-shrink为1的n倍。
+    
+
+    flex-basis： 定义在分配多余空间之前，项目占据的主轴空间（main size），浏览器根据此属性计算主轴是否有多余空间，
+
+            默认值为auto，即 项目原本大小；
+            设置后项目将占据固定空间。
+
 35. arguments
     在调用函数时，浏览器每次都会传递两个隐含的参数
     1.函数的上下文对象this
@@ -373,6 +405,7 @@ Promise也有一些缺点。首先，无法取消Promise，一旦新建它就会
       以前自己用node后台写过一个博客管理系统的全栈项目里面使用ngixn在配置文件config里面修改过
     4.proxy代理
       vue.config.js里配置proxy代理，利用webpack-dev-server 起本地前端的服务，因此 proxyTable 实际上是将请求发给自己的服务器，再由服务器转发给后台服务器，做了一层代理。vue的proxyTable用的是http-proxy-middleware中间件, 因此不会出现跨域问题。
+    5.window.postMessage的安全性
 
   42. 项目中遇到难解决的问题
     在杭州那个主要的项目中，需要实现文件分享，在上传组件中有个批量上传看到各个文件的上传进度条的功能。
@@ -509,3 +542,48 @@ Promise也有一些缺点。首先，无法取消Promise，一旦新建它就会
  ##性能优化
   53. 什么是防抖，什么是节流。应用场景有哪些？手写防抖和节流？
   54. 什么是重绘和回流，阻止的方法有什么
+    
+  55. 什么是进程，什么是线程
+    进程是资源分配的最小单位，线程是CPU调度的最小单位
+
+  54. 为什么直接对对象新增和删除属性vue会监听不到
+
+  55. 加密算法有了解吗，说一下非对称加密和对称加密
+
+##vue核心
+
+  vue2 双向绑定原理
+
+  双向绑定是什么？
+
+  首先明确一下双向绑定和响应式的概念，双向绑定是双向的，表示数据改变驱动视图改变，视图反过来也可以改变数据。响应式是单向的，只代表数据改变驱动视图改变，响应式的主要原理是数据劫持和观察者模式，是 Vue 最核心的模块。
+
+  Vue 双向绑定和 React 单向绑定
+
+  其中 Vue 和 React 的区别之一就是：Vue 是双向绑定；React 是单向绑定，因为 React 视图的改变需要手动执行 this.$setState() 来改变数据。
+  1.6 Vue2 数据劫持的原理
+  数据劫持核心是 defineReactive 函数，里面主要使用 Object.defineProperty 来对对象访问器 getter 和 setter 进行劫持。数据变更时 set 函数里面可以通知视图更新。
+  在使用 Object.defineProperty 进行数据劫持的时候，对象和数组是分开处理的：对象是遍历对象属性之后进行递归劫持；数组是重写数组的原型方法比如 splice。这个我看了一些源码和资料。Object.defineProperty 本身是可以监控到数组下标的变化的，但尤大在 github issue 回复过从性能/体验的性价比考虑弃用了这种对数组的劫持方案。举例子就是对象属性通常比较少对每一个属性劫持不会消耗太多性能，但数组可能有成千上万个元素，如果每一个元素都劫持，无疑消耗过多性能。
+  1.7 Vue2 数据劫持的缺陷
+  第一个缺陷是由于 Vue2 数据劫持底层是用 ES5 的 Object.defineProperty 实现的，所以不兼容 IE8 以下。
+  第二个缺陷是 Vue2 数据劫持无法检测数组和对象的变化，只会劫持一开始存在 data 选项里面的数据，这就是官网建议我们把可能要使用的数据一开始声明在 data 里面并提供初始值。对象新增属性可以通过 Vue.$set() 进行数据劫持，数组新增元素也可以通过 Vue.$set()，或者因为数组原型方法已经被重写了可以用 splice、push、unshift 等方法新增元素。
+  1.8 Vue3 数据劫持的优势
+  Vue3 数据劫持底层主要是使用 ES6 的 Proxy 实现。
+  Proxy 的优势如下:
+
+  Proxy 可以直接监听对象（const proxy = new Proxy(target, handler)）；defineProperty 需要遍历对象属性进行监听。
+  Proxy 可以直接监听对象新增的属性；defineProperty 只能劫持一开始就存在的属性，新增属性需要手动 Observer。
+  Proxy 可以直接监听数组的变化；defineProperty 无法监听数组的变化。
+  Proxy 有多达 13 种拦截方法：不限于 get、set、has、deleteProperty、apply、ownKeys、construct 等等；除开 get 和 set 其他都是 defineProperty 不具备的。
+  Proxy 返回的是一个新对象，我们可以只操作新的对象达到目的；defineProperty 只能遍历对象属性直接修改；
+
+  Proxy 的劣势如下:
+
+  ES6 的 Proxy 的存在浏览器兼容性问题。
+
+
+  Proxy 和 Reflect 结合实现 Vue3 底层数据劫持原理。Reflect 设计的目的是为了优化 Object 的一些操作方法以及合理的返回 Object 操作返回的结果，对于一些命令式的 Object 行为，Reflect 对象可以将其变为函数式的行为。比如 （'name' in obj） = Reflect.has(obj, 'name')
+
+  1.9 Vue3 有什么新特性
+  Vue2.x 的组织代码形式，叫 Options API，而 Vue3 最大的特点是 Composition API 中文名是合成函数：以函数为载体，将业务相关的逻辑代码抽取到一起，整体打包对外提供相应能力。可以理解它是我们组织代码，解决逻辑复用的一种方案。
+  其中 setup 是 Composition API 的入口函数，是在 beforeCreate 声明周期函数之前执行的。还提供了 ref 函数定义一个响应式的数据，reactive 函数定义多个数据的响应式等等。
