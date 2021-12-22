@@ -315,9 +315,13 @@ Promise也有一些缺点。首先，无法取消Promise，一旦新建它就会
    new一个函数，JS编译器会做的四件事情：
                                               
     1.创建一个新的空的对象
+      var obj = {}
     2.将构造函数的作用域赋给新对象（因此this就指向了这个新对象）
-    3.执行构造函数中的代码（为这个新对象添加属性）
-    4.如果这个函数有返回值，则返回；否则，就会默认返回新对象
+      obj.__proto__ = OBJECT.prototype
+    3.将this绑定到这个实例对象，并执行构造函数中的代码（为这个新对象添加属性）
+      const r = OBJECT.apply(obj, arguments) 
+    4.如果这个函数有返回值，则返回；否则，就会默认返回新对象 
+      return r instanceof Object ? r : obj
 
 40. 事件传播机制
     分三个阶段
