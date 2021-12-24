@@ -10,6 +10,11 @@ function getMaxChar(str) {
       map.set(iChar, count + 1)
     }
   }
+  // let max = ['init', 0]
+  // for (let value of map) {
+  //   if (value[1] > max[1]) max = value
+  // }
+  // return max
   // let arr = [...map].sort((a, b) => b[1] - a[1])
   //  return arr[0]
   // 以上是正确答案 以下是我当时写的答案
@@ -20,3 +25,4 @@ function getMaxChar(str) {
 
 const myStr = 'sdadaqrqgzvzxqweqedas'
 
+console.log(getMaxChar(myStr))
