@@ -1,4 +1,7 @@
-本项目主要存放实际的一些面试经历题目 某些会有相应的事后解答与自我总结
+本项目主要存放实际的一些面试经历题目 某些会有相应的事后解答与自我总结  
+
+
+
 // 全部背完即可解决面试八股文部分 手写实现和leetcode仍需努力
 
 汇总面试的常见问题与解答   八八八八八八八八八八股文（卷上天了,人麻了）
@@ -189,16 +192,18 @@ Promise也有一些缺点。首先，无法取消Promise，一旦新建它就会
     async函数就是将 Generator 函数的星号（*）替换成async，将yield替换成await，仅此而已
 22. post和get的区别
     
-    1.get是获取数据的，而post是提交数据的,只是它们的语义不同而已
+    1. get是获取数据的，而post是提交数据的,只是它们的语义不同而已
 
-    2.GET 用于获取信息，是无副作用的，是幂等的，且可被浏览器缓存， 而POST 用于修改服务器上的数据，有副作用，非幂等，不可被浏览器缓存。
+    2. GET 用于获取信息，是无副作用的，是幂等的，且可被浏览器缓存， 而POST 用于修改服务器上的数据，有副作用，非幂等，不可被浏览器缓存。
 
-    3.get使用url传参，post一般使用form表单传参，必要时post也可以使用url传参
+    3. get使用url传参，post一般使用form表单传参，必要时post也可以使用url传参
 
-    4.get提交的数据有长度限制，post请求没有内容长度限制，http协议本身没有限制url及正文长度，对url的限制一般是浏览器和服务器的原因
+    4. get提交的数据有长度限制，post请求没有内容长度限制，http协议本身没有限制url及正文长度，对url的限制一般是浏览器和服务器的原因
 
-    5.post请求比get请求较为安全一些，get参数放在url中，但是http请求都是明文传输，post依旧可以被抓包。仅有用https安全一些，
-    get请求会将url请求保存在浏览器历史记录里，这样就没post安全
+    5. post请求比get请求较为安全一些，get参数放在url中，但是http请求都是明文传输，post依旧可以被抓包。仅有用https安全一些，get请求会将url请求保存在浏览器历史记录里，这样就没post安全
+    
+    6. GET请求只能进行url编码，而POST支持多种编码方式
+
 23. background-position: x y    0 0 代表左上角，5px -10px代表向右偏移5px,向上偏移10px
     
 24. box-sizing的默认值： content-box(盒子的高度是独立的,就为height)， border-box(盒子的高度是要加入border宽度和padding的值，即盒子内容的高度 =  height - border-width * 2 - padding-top - padding-bottom)
