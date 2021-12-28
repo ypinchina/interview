@@ -57,6 +57,7 @@
 
 8.  强缓存与协商缓存的区别
   
+    
 
 9.  vue路由有几种模式，有什么区别
 
@@ -698,8 +699,31 @@ Promise也有一些缺点。首先，无法取消Promise，一旦新建它就会
 
         什么是内存泄漏：内存泄漏指由于疏忽或错误造成程序未能释放已经不再使用的内存。内存泄漏并非指内存在物理上的消失，而是应用程序分配某段内存后，由于设计错误，导致在释放该段内存之前就失去了对该段内存的控制，从而造成了内存的浪费。
         
+        1.  闭包
+        2.  全局变量
+        3.  DOM操作
+        4.  定时器
+        5.  console.log打印
+
+
     2.  display none 和 visibility hidden有什么区别
-    
+
+        dispaly:none 设置该属性后，该元素下的元素都会隐藏，占据的空间消失。
+
+        visibility:hidden 设置该元素后，元素虽然不可见了，但是依然占据空间的位置。
+
+ 
+
+    display:none和visibility:hidden的区别？
+
+        1. visibility具有继承性，其子元素也会继承此属性，若设置visibility:visible，则子元素会显示
+
+        2. visibility不会影响计数器的计算，虽然隐藏掉了，但是计数器依然继续运行着。
+
+        3. 在css3的transition中支持visibility属性，但是不支持display，因为transition可以延迟执行，
+            因此配合visibility使用纯css实现hover延时显示效果可以提高用户体验
+
+        4. display:none会引起回流(重排)和重绘 visibility:hidden会引起重绘
 ## vue核心
 
   59. vue2 双向绑定原理
