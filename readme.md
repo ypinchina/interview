@@ -25,9 +25,10 @@
   2、然后跟服务器端三次握手建立连接
   3、服务器将浏览器请求的资源返回
   4、浏览器根据下载的.html文件构建DOM TREE
-  5、浏览器根据下载的.css文件构建 CSS DOM TREE 
-  6、浏览器整合DOM TREE 与CSS DOM TREE 构建render Tree,并渲染,直至渲染完成。
+  5、浏览器根据下载的.css文件构建 CSS OM TREE 
+  6、浏览器整合DOM TREE 与CSS OM TREE 构建render Tree,并渲染,直至渲染完成。
   解析 html 以构建 dom 树 -> 构建 render 树->布局 render 树(layout/ reflow 回流)->绘制 render树(repaint重绘)
+
 5. http状态码
 答：
     1、 101 客户端需要继续发送剩余请求
@@ -82,7 +83,8 @@
 
     以及一种复杂数据类型： Object (Object下面有Function ,Array, Date, regxp)
 
-    使用 typeof可以甄别出null意外的基本数据类型，typeof null 为Object类型
+    使用 typeof可以甄别出null以外的基本数据类型，typeof null 为Object类型（是个老版本遗留下来的bug）,
+    typeof console.log == 'function' 亦可甄别函数
 
     甄别复杂数据类型的Array Function使用fun instanceof Function 为true来甄别
 
@@ -94,7 +96,7 @@
     typeof {} // 'object'
     typeof console.log // 'function'
 
-14. js的继承方式
+3.  js的继承方式
     
     class继承
     首先先来讲下 class，其实在 JS 中并不存在类，class 只是语法糖，本质还是函数。
@@ -106,7 +108,7 @@
     什么是原型链？什么是原型链继承
 
     
-15. Vue数据传递方式
+4.  Vue数据传递方式
     1.父组件给子组件传递数据，使用props在子组件接收
     2.子组件给父组件传递数据，使用this.$emit的方式
     3.兄弟组件之间使用中央集成总线的方式传递数据，
@@ -114,7 +116,7 @@
     5.使用Vuex
     6.$children $parents
 
-16. let var const的区别
+5.  let var const的区别
     从变量声明提升这块： var允许变量提升，（使用 var 声明的变量会被提升到作用域的顶部），后两者在变量声明之前使用的话，
     首先报错的原因是因为存在暂时性死区，我们不能在声明前就使用变量，这也是 let 和 const 优于 var 的一点。然后这里你认为的提升和 var 的提升是有区别的，虽然变量在编译的环节中被告知在这块作用域中可以访问，但是访问是受限制的。
     从变量块级作用域这方面： var声明的变量没有块级作用域的概念，后两者有
@@ -130,7 +132,7 @@
               var 存在提升，我们能在声明之前使用。let、const 因为暂时性死区的原因，不能在声明前使用
               var 在全局作用域下声明变量会导致变量挂载在 window 上，其他两者不会
 
-17. 请你说一下vue里面provide和inject两个配置项
+6.  请你说一下vue里面provide和inject两个配置项
 vue提供了provide和inject帮助我们解决多层次嵌套嵌套通信问题。
 在provide中指定要传递给子孙组件的数据，子孙组件通过inject注入祖父组件传递过来的数据。
 provide 和 inject 主要为高阶插件/组件库提供用例,并不推荐直接用于应用程序代码中(官方文档原话)。
@@ -259,8 +261,6 @@ Promise也有一些缺点。首先，无法取消Promise，一旦新建它就会
     　　4、http的连接很简单，是无状态的；HTTPS协议是由SSL+HTTP协议构建的可进行加密传输、身份认证的网络协议，比http协议安全。
 
 27. http 0.9 http1.0 1.1和2.0 3.0
-
-    0.9是只有get方法
 
     1.1是keep-alive长连接
 
@@ -437,7 +437,7 @@ Promise也有一些缺点。首先，无法取消Promise，一旦新建它就会
     2. 事件目标阶段， 传播到事件触发处时触发注册的事件
     3. 冒泡阶段， 从事件触发处往 window 传播，遇到注册的冒泡事件会触发
   一般事件的触发都是按照以上的顺序触发，但是有特例： 如同一个dom同时注册了捕获和冒泡，
-  那这个dom的事件触发顺序将按住奥它注册的顺序执行。
+  那这个dom的事件触发顺序将按照它注册的顺序执行。
 
   使用addEventListener来给dom注册绑定事件，dom.addEventListener('click', function() {}, false)
   第三个参数可以填写布尔值(可选)或对象（options， 可选），如果是布尔值，此参数代表useCapter  (意思是使用'俘虏，捕获')
@@ -528,9 +528,9 @@ Promise也有一些缺点。首先，无法取消Promise，一旦新建它就会
   
   45. vue3的一些笔记：
     
-    etup()在vue实例完全初始化之前执行，取不到this实例
+    setup()在vue实例完全初始化之前执行，取不到this实例
 
-    1.ref和react方法 都能把非双向数据绑定的数据变双向数据绑定的数据，都是利用proxy对象转成双向数据绑定的对象proxy((key, value: ''))。两者区别是ref作用于基本数据类型，后者作用于非基础数据类型
+    1.ref和react方法 都能把非双向数据绑定的数据变双向数据绑定的数据，都是利用proxy对象转成双向数据绑定的对象proxy((key, value: ''))。两者区别是ref作用于基本数据类型，后者作用于复杂数据类型，比如object
 
     为了取响应式对象里的key-value 普通解构出来的属性是没有响应式的，即使用react对象包裹， 需要使用toRefs包裹才可以赋予解构的响应式。即在原来的proxy({name: 'Yip'})前 套上 toRefs({name: proxy({name: 'Yip})})
 
@@ -772,7 +772,15 @@ Promise也有一些缺点。首先，无法取消Promise，一旦新建它就会
   1.9 Vue3 有什么新特性
   Vue2.x 的组织代码形式，叫 Options API，而 Vue3 最大的特点是 Composition API 中文名是合成函数：以函数为载体，将业务相关的逻辑代码抽取到一起，整体打包对外提供相应能力。可以理解它是我们组织代码，解决逻辑复用的一种方案。
   其中 setup 是 Composition API 的入口函数，是在 beforeCreate 声明周期函数之前执行的。还提供了 ref 函数定义一个响应式的数据，reactive 函数定义多个数据的响应式等等。
-
+  61. v-model原理
+   
+   v-model其实是个语法糖，它实际上是做了两步动作：
+    1、绑定数据value
+    2、触发输入事件input
+    也就是说，v-model="username"等同于：
+        
+        input type="text" :value="username" @input="username=$event.target.value"
+## CSS
   60. 什么是盒模型
 
      CSS盒模型本质上是一个盒子，封装周围的HTML元素，它包括：边距margin，边框border，填充padding，和实际内容content。盒模型允许我们在其它元素和周围元素边框之间的空间放置元素。
