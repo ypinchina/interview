@@ -28,6 +28,8 @@
   5、浏览器根据下载的.css文件构建 CSS OM TREE 
   6、浏览器整合DOM TREE 与CSS OM TREE 构建render Tree,并渲染,直至渲染完成。
   解析 html 以构建 dom 树 -> 构建 render 树->布局 render 树(layout/ reflow 回流)->绘制 render树(repaint重绘)
+  回流：根据生成的渲染树，进行回流，得到节点的几何信息（位置，大小）
+  重绘：根据渲染树以及回流得到的几何信息，得到节点的绝对像素。
 
 5. http状态码
 答：
@@ -503,7 +505,12 @@ Promise也有一些缺点。首先，无法取消Promise，一旦新建它就会
       cookie为4KB，  两个storage为5M, indexDB为无限
     对于数据生命周期：
       cookies一般由服务器生成，可以设置过期时间, localStorage和indexDB永久存在除非手动清除，sessionStorage是关闭页面就清除
-      
+
+    cookie, session, token
+
+     cookie是一开始用于给浏览器和服务器通讯的，因为http是无状态的，需要知道哪些用户在登录，将用户名密码保存在浏览器，以便下次可以不输入直接登录，所以需要session保证cookie存储账号密码的安全。只需要cookie保存对应账号密码的sessionId即可，而
+     session Id存储在服务器。但是久而久之服务器存储了太多太多的sessionId,如果服务器突然挂了，就出问题了，如果多个服务器的话又需要各个服务器都要存储所有的session,所以发展到现在是使用JWT(java web token)。 服务器用jwt签名生成的密文发给浏览器，浏览器用cookie或者storage的方式保存。有人会质疑存在用户的token的安全性，jwt是由三部分组成的，header,payload,signature。header部分会声明用什么算法加密，payload存储一些信息比如有效期，然后这两者经过base64编译，然后这两段base64经过header的签名算法得到signature，获得完整jwt
+
     Service Worker
       Service Worker 是运行在浏览器背后的独立线程，一般可以用来实现缓存功能。
       使用 Service Worker的话，传输协议必须为 HTTPS。因为 Service Worker 中涉及到请求拦截，所以必须使用 HTTPS 协议来保障安全。F12中Application中能看到Service Worker
@@ -667,8 +674,13 @@ Promise也有一些缺点。首先，无法取消Promise，一旦新建它就会
     避免频繁读取会引发回流/重绘的属性，如果确实需要多次使用，就用一个变量缓存起来。
     利用 CSS3 的transform、opacity、filter这些属性可以实现合成的效果，也就是GPU加速。
 
+  长列表无限加载
 
-
+    1.列表懒加载，每次下拉再加载剩余的列表。一开始是真实列表10条，需要知道firstIndex, 比如前十是0-9 ，下次下拉firstIndex
+    为10，加载量可以用另外的参数。缺点：长时间加载列表还是会卡顿，还是会过多dom节点。
+    
+    2.react-virtualized 
+    ![avatar](https://upload-images.jianshu.io/upload_images/20409039-c52edc50c6280b5b.png?imageMogr2/auto-orient/strip|imageView2/2/format/webp)
   1.  什么是进程，什么是线程
     进程是资源分配的最小单位，线程是CPU调度的最小单位
 
@@ -780,15 +792,44 @@ Promise也有一些缺点。首先，无法取消Promise，一旦新建它就会
     也就是说，v-model="username"等同于：
         
         input type="text" :value="username" @input="username=$event.target.value"
+
+  62. diff算法
+  63. nextTick原理
+  64. template原理
+  65. v指令
+  66. vuex原理
 ## CSS
-  60. 什么是盒模型
+  68. href和src的区别
+        href表示超文本引用，用在link和a等元素上，href是引用和页面关联，是在当前元素和引用资源之间建立联系，src表示引用资源，表示替换当前元素，用在img，script，iframe上，src是页面内容不可缺少的一部分。
+
+      　　src是source的缩写，是指向外部资源的位置，指向的内部会迁入到文档中当前标签所在的位置；在请求src资源时会将其指向的资源下载并应用到当前文档中，例如js脚本，img图片和frame等元素。
+
+      <script src="js.js"></script>当浏览器解析到这一句的时候会暂停其他资源的下载和处理，直至将该资源加载，编译，执行完毕，图片和框架等元素也是如此，类似于该元素所指向的资源嵌套如当前标签内，这也是为什么要把js饭再底部而不是头部。
+
+      <link href="common.css" rel="stylesheet"/>当浏览器解析到这一句的时候会识别该文档为css文件，会下载并且不会停止对当前文档的处理，这也是为什么建议使用link方式来加载css而不是使用@import。
+
+
+        补充：link和@import的区别
+
+        两者都是外部引用CSS的方式，但是存在一定的区别：
+
+        区别1：link是XHTML标签，除了加载CSS外，还可以定义RSS等其他事务；@import属于CSS范畴，只能加载CSS。
+
+        区别2：link引用CSS时，在页面载入时同时加载；@import需要页面网页完全载入以后加载。
+
+        区别3：link是XHTML标签，无兼容问题；@import是在CSS2.1提出的，低版本的浏览器不支持。
+
+        区别4：link支持使用Javascript控制DOM去改变样式；而@import不支持。
+        
+  69. flex布局实现瀑布流
+  70. 什么是盒模型
 
      CSS盒模型本质上是一个盒子，封装周围的HTML元素，它包括：边距margin，边框border，填充padding，和实际内容content。盒模型允许我们在其它元素和周围元素边框之间的空间放置元素。
 
     box-sizing: content-box（W3C盒模型，又名标准盒模型）：元素的宽高大小表现为内容的大小。 box-sizing: border-box（IE盒模型，又名怪异盒模型）：元素的宽高表现为内容 + 内边距 + 边框的大小。背景会延伸到边框的外沿。
 
 
-  1.   BFC是什么
+  71.  BFC是什么
      BFC是页面中的一块渲染区域，并且有一套渲染规则，它决定了其子元素将如何定位，以及和其他元素的关系和相互作用。具有 BFC 特性的元素可以看作是隔离了的独立容器，容器里面的元素不会在布局上影响到外面的元素，并且 BFC 具有普通容器所没有的一些特性。
 
      如果想要避免外边距的重叠，可以将其放在不同的 BFC 容器中。
@@ -817,7 +858,7 @@ Promise也有一些缺点。首先，无法取消Promise，一旦新建它就会
     bfc就是页面上的一个独立容器，容器里面的子元素不会影响外面元素。
 
 
-  2.   如何实现精准计时
+  72.  如何实现精准计时
    requestAnimationFrame 自带函数节流功能，基本可以保证在 16.6 毫秒内只执行一次（不掉帧的情况下），并且该函数的延时效果是精确的，没有其他定时器时间不准的问题，当然你也可以通过该函数来实现 setTimeout。
 
 
