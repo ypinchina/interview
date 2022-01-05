@@ -681,6 +681,7 @@ Promise也有一些缺点。首先，无法取消Promise，一旦新建它就会
     
     2.react-virtualized 
     ![avatar](https://upload-images.jianshu.io/upload_images/20409039-c52edc50c6280b5b.png?imageMogr2/auto-orient/strip|imageView2/2/format/webp)
+    
   1.  什么是进程，什么是线程
     进程是资源分配的最小单位，线程是CPU调度的最小单位
 
