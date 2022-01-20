@@ -13,6 +13,7 @@
 2. 垂直水平居中的方案有哪些
 3. CSS3怎么写一个动画
 4.  translate属性介绍一下
+    动画名 时间 动画的表现形式
 5.  transform 里面除了你说的translate还有什么属性
     rotato  scale
 
