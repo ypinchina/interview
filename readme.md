@@ -119,12 +119,16 @@
     6.$children $parents
 
 5.  let var const的区别
-    从变量声明提升这块： var允许变量提升，（使用 var 声明的变量会被提升到作用域的顶部），后两者在变量声明之前使用的话，
+    - 从变量声明提升这块： var允许变量提升，（使用 var 声明的变量会被提升到作用域的顶部），后两者在变量声明之前使用的话，
     首先报错的原因是因为存在暂时性死区，我们不能在声明前就使用变量，这也是 let 和 const 优于 var 的一点。然后这里你认为的提升和 var 的提升是有区别的，虽然变量在编译的环节中被告知在这块作用域中可以访问，但是访问是受限制的。
-    从变量块级作用域这方面： var声明的变量没有块级作用域的概念，后两者有
+
+    - 从变量块级作用域这方面： var声明的变量没有块级作用域的概念，后两者有
     从重复声明变量这块: var可以重复声明同名变量，后两者禁止
-    从是否可以重新给变量赋值：const不允许，另外两者可以
-    首先在全局作用域下使用 let 和 const 声明变量，变量并不会被挂载到 window 上，这一点就和 var 声明有了区别。
+
+    - 从是否可以重新给变量赋值：const不允许，另外两者可以
+    
+    - 首先在全局作用域下使用 let 和 const 声明变量，变量并不会被挂载到 window 上，这一点就和 var 声明有了区别。
+  
     let b = 1
     const c = 1
     console.log(window.b) // undefined
@@ -235,14 +239,14 @@ Promise也有一些缺点。首先，无法取消Promise，一旦新建它就会
     
 25. 箭头函数和普通函数有何不同
 
-    1.箭头函数只能写在匿名函数中，仅是函数表达式的情况。 普通函数则没这个限制，可以是函数声明也可以是函数表达式
-    2.箭头函数不能用new来创建构造函数的实例，普通函数可以（因为箭头函数创建的时候程序不会为它创建construct方法，也就是没有构造能力，用完就丢掉了，不像普通函数重复利用，因此也不需要构造函数原型，也就是不会自动生成prototype属性）
-    3.箭头函数的this与上级上下文作用域的this保持一致，普通函数中的this，指向调用这个函数的对象
-    4.arguments的不同，箭头函数没有arguments对象
-    5.箭头函数不能通过bind、call、apply来改变this的值，但依然可以调用这几个方法（只是this的值不受这几个方法控制）
-    6.箭头函数没有super()和new.target的绑定。普通函数有
-    7.综合箭头函数没有.protypeto 属性
-    8.箭头函数不能当做Generator函数,不能使用yield关键字
+    1. 箭头函数只能写在匿名函数中，仅是函数表达式的情况。 普通函数则没这个限制，可以是函数声明也可以是函数表达式
+    2. 箭头函数不能用new来创建构造函数的实例，普通函数可以（因为箭头函数创建的时候程序不会为它创建construct方法，也就是没有构造能力，用完就丢掉了，不像普通函数重复利用，因此也不需要构造函数原型，也就是不会自动生成prototype属性）
+    3. 箭头函数的this与上级上下文作用域的this保持一致，普通函数中的this，指向调用这个函数的对象
+    4. arguments的不同，箭头函数没有arguments对象
+    5. 箭头函数不能通过bind、call、apply来改变this的值，但依然可以调用这几个方法（只是this的值不受这几个方法控制）
+    6. 箭头函数没有super()和new.target的绑定。普通函数有
+    7. 综合箭头函数没有.prototype 属性
+    8. 箭头函数不能当做Generator函数,不能使用yield关键字
 
 26. http和https
     
@@ -719,6 +723,12 @@ Promise也有一些缺点。首先，无法取消Promise，一旦新建它就会
 
   ![alt 属性文本](https://upload-images.jianshu.io/upload_images/20409039-c52edc50c6280b5b.png?imageMogr2/auto-orient/strip|imageView2/2/format/webp)
 
+* CDN
+  
+  CDN的全称是Content Delivery Network，即内容分发网络。其目的是通过在现有的Internet中增加一层新的网络架构，将网站的内容发布到最接近用户的网络“边缘”，使用户可以就近取得所需的内容，提高用户访问网站的响应速度。
+
+  CDN网络是在用户和服务器之间增加Cache层，主要是通过接管DNS实现，将用户的请求引导到Cache上获得源服务器的数据，从而降低网络的访问的速度。
+
   1.  什么是进程，什么是线程
 
     进程是资源分配的最小单位，线程是CPU调度的最小单位。浏览器是多进程和多线程的，
@@ -782,18 +792,13 @@ Promise也有一些缺点。首先，无法取消Promise，一旦新建它就会
 
         visibility:hidden 设置该元素后，元素虽然不可见了，但是依然占据空间的位置。
 
- 
-
-    display:none和visibility:hidden的区别？
-
         1. visibility具有继承性，其子元素也会继承此属性，若设置visibility:visible，则子元素会显示
 
         2. visibility不会影响计数器的计算，虽然隐藏掉了，但是计数器依然继续运行着。
 
-        3. 在css3的transition中支持visibility属性，但是不支持display，因为transition可以延迟执行，
-            因此配合visibility使用纯css实现hover延时显示效果可以提高用户体验
 
-        4. display:none会引起回流(重排)和重绘 visibility:hidden会引起重绘
+        3. display:none会引起回流(重排)和重绘 visibility:hidden会引起重绘
+   
 ## vue核心
 
   59. vue2 双向绑定原理
@@ -844,7 +849,7 @@ Promise也有一些缺点。首先，无法取消Promise，一旦新建它就会
   63. nextTick原理
   64. template原理
   65. v指令
-    v-for , v-if, v-else, v-show, v-once,
+    v-for , v-if, v-else, v-show, v-once, v-self, v-
   66. vuex原理
 ## CSS
   68. href和src的区别
@@ -916,6 +921,7 @@ Promise也有一些缺点。首先，无法取消Promise，一旦新建它就会
 
 
   72.  如何实现精准计时
+  
    requestAnimationFrame 自带函数节流功能，基本可以保证在 16.6 毫秒内只执行一次（不掉帧的情况下），并且该函数的延时效果是精确的，没有其他定时器时间不准的问题，当然你也可以通过该函数来实现 setTimeout。
 
 
@@ -930,15 +936,15 @@ Promise也有一些缺点。首先，无法取消Promise，一旦新建它就会
 
     Express的中间件，用来实现各种功能，比如cookie解析、日志记录、文件压缩等。对于同一个网络请求，可能同时有多个匹配的中间件，一般顺序执行。而 next() 则是把执行控制权，从上一个中间件，转移到下一个中间件的函数。
 
-  73. 递归和迭代的区别
+  1.  递归和迭代的区别
   
     递归（recursion）：递归常被用来描述以自相似方法重复事物的过程，在数学和计算机科学中，指的是在函数定义中使用函数自身的方法。（A调用A）
 
     迭代（iteration）：重复反馈过程的活动，每一次迭代的结果会作为下一次迭代的初始值。（A重复调用B）
 
-  74. web worker是什么
-  75. grid布局你知道吗
-  76. vue 动态路由你知道吗
+  2.  web worker是什么
+  3.  grid布局你知道吗
+  4.  vue 动态路由你知道吗
     vue项目实现动态路由的方式大体可分为两种:
     1.前端这边把路由写好，登录的时候根据用户的角色权限来动态展示路由，(前端控制路由)
 
@@ -951,10 +957,21 @@ Promise也有一些缺点。首先，无法取消Promise，一旦新建它就会
 
     (2)、复杂的路由权限设置：比如OA系统、多种角色的权限配置。通常需要后端返回路由列表，前端渲染使用
 
-  77. react组件间传递数据的方式
-  78. scoped的作用是什么，原理是怎么实现的
+  5.  react组件间传递数据的方式
+  6.  scoped的作用是什么，原理是怎么实现的
       
-  79. webpack多页面是怎么实现
-  80. 如何减少webpack打包的大小
+  7.  webpack多页面是怎么实现
+  8.  如何减少webpack打包的大小
 
-   
+  9.  白屏时间， 首屏时间如何计算
+  
+      白屏时间，即输入网址回车后到页面开始渲染第一个元素的时间
+      首屏时间，即输入网址回车后到页面开始渲染完成第一个屏幕元素的时间
+      window.performance.timing下的属性
+      //  .navigationStart 准备加载页面的起始时间
+      //  .domLoading   ‘current document readiness’ 设置为 loading的时间 (这个时候还木有开始解析文档)
+      //  .fetchStart        开始检查缓存或开始获取资源的时间
+
+      白屏时间 = domloadng - fetchStart
+      console.log('首屏图片加载完成 : ',window.lastImgLoadTime - window.performance.timing.navigationStart); 
+      //在最后一张图出来的时候打时间点
