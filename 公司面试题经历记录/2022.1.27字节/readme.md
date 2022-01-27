@@ -9,31 +9,32 @@ console.log(a)
 console.log(b)
 console.log(c)
 
-2. new Promise((resovle, reject) => {
+2. promise
+new Promise((resovle, reject) => {
      reject('错误')
-3. }).then(() => {
-4. console.log(1)
-5. }, err => {
-   console.log(2)
-6. }).then(() => {
-   console.log(3)
-7. },err => {
-8. console.log(4)
-9. })
+}).then(() => {
+ console.log(1)
+}, err => {
+  console.log(2)
+}).then(() => {
+  console.log(3)
+},err => {
+  console.log(4)
+})
 
 试着输出promise里面的值
 
 
-10. prototype
 
-Array.__proto__ 等于什么
+
+2. Array.__proto__ 等于什么
 
 ## 算法题
 
-11. function getArray() {
-12. // 完善这里的代码
-13. 
-14. }
+function getArray() {
+ // 完善这里的代码
+
+ }
 
 getArray(null, 1) = [null]
 
