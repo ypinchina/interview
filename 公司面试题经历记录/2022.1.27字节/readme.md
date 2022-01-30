@@ -41,7 +41,6 @@ getArray(null, 1) = [null]
 getArray(null, 2) = [null, null]
 
 getArray('o', 2, 2) = [
-  ['o', 'o'], ['o', 'o'],
   ['o', 'o'], ['o', 'o']
 ]
 
@@ -50,6 +49,19 @@ getArray('o', 3, 3, 2) = [
   ['o', 'o'], ['o', 'o'], [ 'o', 'o'],
   ['o', 'o'], ['o', 'o'], [ 'o', 'o']
 ]
+
+function getArray(val, ...args) {
+    if (args.length === 0) {
+        return val;
+    }
+    let slice = args.slice(1);
+    let res = [];
+    for (let i = 0; i < args[0]; i++) {
+        res.push(getArray(val, ...slice));
+    }
+    return res;
+}
+
 
 ## https的握手过程
 
