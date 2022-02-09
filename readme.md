@@ -1009,3 +1009,9 @@ Promise也有一些缺点。首先，无法取消Promise，一旦新建它就会
       白屏时间 = domloadng - fetchStart
       console.log('首屏图片加载完成 : ',window.lastImgLoadTime - window.performance.timing.navigationStart); 
       //在最后一张图出来的时候打时间点
+  10. dom diff 算法 核心特点
+   
+  1.同级对比 2. 根据索引对比 3.深度优先遍历
+
+  11. vue的渲染优先级，会先判断是否有el: "#app"的元素，有则渲染id为app的元素，然后选择是否有template的选项，有则渲染，
+   template选项的字符串，最后寻找是否有render函数，会渲染render函数返回的字符串。优先级render > template > el
