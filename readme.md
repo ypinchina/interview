@@ -798,9 +798,8 @@ Promise也有一些缺点。首先，无法取消Promise，一旦新建它就会
         1.  闭包
         2.  意外的全局变量
         3. DOM 引用
-  
   ![alt 属性文本](https://img2018.cnblogs.com/blog/1632708/201905/1632708-20190510165200005-1791562750.png)
-        4. 遗忘的定时器和回调函数
+     4. 遗忘的定时器和回调函数
 
 
     1.  display none 和 visibility hidden有什么区别
@@ -811,10 +810,7 @@ Promise也有一些缺点。首先，无法取消Promise，一旦新建它就会
 
         1. visibility具有继承性，其子元素也会继承此属性，若设置visibility:visible，则子元素会显示
 
-        2. visibility不会影响计数器的计算，虽然隐藏掉了，但是计数器依然继续运行着。
-
-
-        3. display:none会引起回流(重排)和重绘 visibility:hidden会引起重绘
+        2. display:none会引起回流(重排)和重绘 visibility:hidden会引起重绘
    
 ## vue核心
 
