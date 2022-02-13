@@ -19,7 +19,7 @@ function fibonacci(n) {
 // F(n) = F(n - 1) + F(n - 2)，其中 n > 1
 // 给定 n ，请计算 F(n) 。
 
- 
+
 
 // 示例 1：
 
@@ -31,23 +31,23 @@ function fibonacci(n) {
  * @param {number} n
  * @return {number}
  */
- var fib = function (n) {
+var fib = function (n) {
   if (n === 0) {
-      return 0
+    return 0
   } else if (n == 1 || n == 2) {
-      return 1
+    return 1
   } else {
-      // 设定 数字1 返回1 ，数字2也返回1，这里是模拟前两项
-      let dp1 = 1
-      let dp2 = 1
-      for (let i = 2; i <= n; i++) {
-          // 从2开始到第n项
-          let temp = dp2
-          dp2 = dp1
-          dp1 = dp1 + temp
-          // dp1是最新的一项
-      }
-      return dp2
+    // 设定 数字1 返回1 ，数字2也返回1，这里是模拟前两项
+    let dp1 = 1
+    let dp2 = 1
+    for (let i = 2; i <= n; i++) {
+      // 从2开始到第n项
+      let temp = dp2
+      dp2 = dp1
+      dp1 = dp1 + temp
+      // dp1是最新的一项
+    }
+    return dp2
   }
 };
-时间复杂度 O(n) 因为是for循环，空间复杂度O(1) ，常量级
+// 时间复杂度 O(n) 因为是for循环，空间复杂度O(1) ，常量级
