@@ -598,25 +598,37 @@ Promise也有一些缺点。首先，无法取消Promise，一旦新建它就会
     ·watchEffect立即执行；传参只传入回调函数；不能获取到旧的值
   
   46. vue的生命周期
-    进入beforeCreate 时，是获取不到 props 或者 data 中的数据的，因为这些数据的初始化都在 initState (源码)中。
-    进入created 钩子，可以获取props和data里数据，组件还没被挂载，所以是看不到的
-    进入beforeMount，开始构建Virtual DOM,
-    进入mounted,将 Virtual DOM 渲染为真实 DOM 并且渲染数据
-
-    beforeUpdate和updated()，是更新前和更新后的钩子
+    - beforeCreate	Function	在实例初始化之后，数据观测 (data observer) 
+    和 event/watcher 事件配置之前被调用。(取不到props和data里的数据)
+    - created	Function	在实例创建完成后被立即调用。在这一步，实例已完成以下的
+    配置：数据观测 (data observer)，  属性和方法的运算，watch/event 事件回调。然而，
+    挂载阶段还没开始，$el 属性目前不可见。(可以取到props和data里的数据)
+    - beforeMount	Function	在挂载开始之前被调用：相关的 render 函数首次被调用。（开始构建虚拟dom）
+    - mounted	Function	el 被新创建的 vm.$el 替换，并挂载到实例上去之后调用该钩子。 (虚拟变真实dom挂载)
+        如果 root 实例挂载了一个文档内元素，当 mounted 被调用时 vm.$el 也在文档内。
+    - beforeUpdate	Function	数据更新时调用，发生在虚拟 DOM 打补丁之前。 
+      这里适合在更新之前访问现有的 DOM，比如手动移除已添加的事件监听器。该钩子在
+      服务器端渲染期间不被调用，因为只有初次渲染会在服务端进行。
+    - updated	Function	由于数据更改导致的虚拟 DOM 重新渲染和打补丁，在这之后会调用该钩子。
+    - activated	Function	keep-alive 组件激活时调用。该钩子在服务器端渲染期间不被调用。
+    - deactivated	Function	keep-alive 组件停用时调用。该钩子在服务器端渲染期间不被调用。
+    - beforeDestroy	Function	实例销毁之前调用。在这一步，实例仍然完全可用。该钩子在服务器端渲染期间不被调用。
+    - destroyed	Function	Vue 实例销毁后调用。调用后，Vue 实例指示的所有东
+        西都会解绑定，所有的事件监听器会被移除，所有的子实例也会被销毁。该钩子在服务器端渲染期间不被调用。
 
     还有两个特殊的生命周期钩子： activated和 deactivated   ，用 keep-alive标签 包裹的组件在切换时
     不会进行销毁，而是缓存到内存中并执行 deactivated 钩子函数，命中缓存渲染后会执行 actived 钩子函数。
 
-  47. keep-alive 组件有什么作用
-    如果你需要在组件切换的时候，保存一些组件的状态防止多次渲染，就可以使用 keep-alive 组件包裹需要保存的组件。
+  1.  keep-alive 组件有什么作用
+    如果你需要在组件切换的时候，主要用于保留组件状态或避免重新渲染
+    与<transition>都是抽象组件
     <keep-alive :include="whiteList" :exclude="blackList" :max="amount">
      <component :is="currentComponent"></component>
     </keep-alive>
     include定义缓存白名单，keep-alive会缓存命中的组件；exclude定义缓存黑名单，
     被命中的组件将不会被缓存；max定义缓存组件上限，超出上限使用LRU的策略置换缓存数据。
 
-  48. callee和caller
+  2.  callee和caller
        callee译名被呼叫者，caller译名呼叫者
       callee是arguments的属性，用于获取当前的方法，可以用于递归调用时方法名被修改的情况;也可以获取当前
       匿名方法
@@ -640,7 +652,7 @@ Promise也有一些缺点。首先，无法取消Promise，一旦新建它就会
         }
         b() // 输出function b() {}
 
-  49.  0.1 + 0.2 = ? 结果如何，为什么，如何纠正?
+  3.   0.1 + 0.2 = ? 结果如何，为什么，如何纠正?
     
       在两数相加时，会先转换成二进制，0.1 和 0.2 转换成二进制的时候尾数会发生无限循环，然后进行对阶运算，
       JS 引擎对二进制进行截断，所以造成精度丢失。
@@ -653,7 +665,7 @@ Promise也有一些缺点。首先，无法取消Promise，一旦新建它就会
       0.1 + 0.2 = 0.30000000000000004 != 0.3
       parseFloat((0.1 + 0.2).toFixed(10)) === 0.3 // true
 
-  50. webpack的loader是什么plugins是什么，两者有什么区别？  
+  4.  webpack的loader是什么plugins是什么，两者有什么区别？  
     
     Loader 本质就是一个函数，在该函数中对接收到的内容进行转换，返回转换后的结果。
 
@@ -669,9 +681,9 @@ Promise也有一些缺点。首先，无法取消Promise，一旦新建它就会
     Plugin 在 plugins 中单独配置，类型为数组，每一项是一个 Plugin 的实例，参数都通过构造函数传入。
 
 
-  51. 优先级： v-once > v-for > v-if
+  5.  优先级： v-once > v-for > v-if
     
-  52. css 优先级是怎么计算的
+  6.  css 优先级是怎么计算的
     
     第一优先级：!important 会覆盖页面内任何位置的元素样式
     1.内联样式，如 style="color: green"，权值为 1000
@@ -742,9 +754,12 @@ Promise也有一些缺点。首先，无法取消Promise，一旦新建它就会
 
 * CDN
   
-  CDN的全称是Content Delivery Network，即内容分发网络。其目的是通过在现有的Internet中增加一层新的网络架构，将网站的内容发布到最接近用户的网络“边缘”，使用户可以就近取得所需的内容，提高用户访问网站的响应速度。
+  CDN的全称是Content Delivery Network，即内容分发网络。
+  其目的是通过在现有的Internet中增加一层新的网络架构，将网站的内容发布到最接近用户的网络“边缘”，
+  使用户可以就近取得所需的内容，提高用户访问网站的响应速度。
 
-  CDN网络是在用户和服务器之间增加Cache层，主要是通过接管DNS实现，将用户的请求引导到Cache上获得源服务器的数据，从而降低网络的访问的速度。
+  CDN网络是在用户和服务器之间增加Cache层，主要是通过接管DNS实现，
+  将用户的请求引导到Cache上获得源服务器的数据，从而降低网络的访问的速度。
 
   1.  什么是进程，什么是线程
 
@@ -825,10 +840,19 @@ Promise也有一些缺点。首先，无法取消Promise，一旦新建它就会
   其中 Vue 和 React 的区别之一就是：Vue 是双向绑定；React 是单向绑定，因为 React 视图的改变需要手动执行 this.$setState() 来改变数据。
   1.6 Vue2 数据劫持的原理
   数据劫持核心是 defineReactive 函数，里面主要使用 Object.defineProperty 来对对象访问器 getter 和 setter 进行劫持。数据变更时 set 函数里面可以通知视图更新。
-  在使用 Object.defineProperty 进行数据劫持的时候，对象和数组是分开处理的：对象是遍历对象属性之后进行递归劫持；数组是重写数组的原型方法比如 splice。这个我看了一些源码和资料。Object.defineProperty 本身是可以监控到数组下标的变化的，但尤大在 github issue 回复过从性能/体验的性价比考虑弃用了这种对数组的劫持方案。举例子就是对象属性通常比较少对每一个属性劫持不会消耗太多性能，但数组可能有成千上万个元素，如果每一个元素都劫持，无疑消耗过多性能。
+  在使用 Object.defineProperty 进行数据劫持的时候，对象和数组是分开处理的：对象是遍历对象属性之后进行递归劫持；
+  数组是重写数组的原型方法比如 splice。这个我看了一些源码和资料。Object.defineProperty 
+  本身是可以监控到数组下标的变化的，但尤大在 github issue 回复过从性能/体验的性价比考虑弃用了这种对数组的劫持方案。
+  举例子就是对象属性通常比较少对每一个属性劫持不会消耗太多性能，但数组可能有成千上万个元素，
+  如果每一个元素都劫持，无疑消耗过多性能。
+
   1.7 Vue2 数据劫持的缺陷
   第一个缺陷是由于 Vue2 数据劫持底层是用 ES5 的 Object.defineProperty 实现的，所以不兼容 IE8 以下。
-  第二个缺陷是 Vue2 数据劫持无法检测数组和对象的变化，只会劫持一开始存在 data 选项里面的数据，这就是官网建议我们把可能要使用的数据一开始声明在 data 里面并提供初始值。对象新增属性可以通过 Vue.$set() 进行数据劫持，数组新增元素也可以通过 Vue.$set()，或者因为数组原型方法已经被重写了可以用 splice、push、unshift 等方法新增元素。
+  第二个缺陷是 Vue2 数据劫持无法检测数组和对象的变化，只会劫持一开始存在 data 选项里面的数据，
+  这就是官网建议我们把可能要使用的数据一开始声明在 data 里面并提供初始值。
+  对象新增属性可以通过 Vue.$set() 进行数据劫持，数组新增元素也可以通过 Vue.$set()，
+  或者因为数组原型方法已经被重写了可以用 splice、push、unshift 等方法新增元素。
+
   1.8 Vue3 数据劫持的优势
   Vue3 数据劫持底层主要是使用 ES6 的 Proxy 实现。
   Proxy 的优势如下:
@@ -836,7 +860,8 @@ Promise也有一些缺点。首先，无法取消Promise，一旦新建它就会
   Proxy 可以直接监听对象（const proxy = new Proxy(target, handler)）；defineProperty 需要遍历对象属性进行监听。
   Proxy 可以直接监听对象新增的属性；defineProperty 只能劫持一开始就存在的属性，新增属性需要手动 Observer。
   Proxy 可以直接监听数组的变化；defineProperty 无法监听数组的变化。
-  Proxy 有多达 13 种拦截方法：不限于 get、set、has、deleteProperty、apply、ownKeys、construct 等等；除开 get 和 set 其他都是 defineProperty 不具备的。
+  Proxy 有多达 13 种拦截方法：不限于 get、set、has、deleteProperty、apply、ownKeys、construct 等等；
+  除开 get 和 set 其他都是 defineProperty 不具备的。
   Proxy 返回的是一个新对象，我们可以只操作新的对象达到目的；defineProperty 只能遍历对象属性直接修改；
 
   Proxy 的劣势如下:
@@ -844,11 +869,17 @@ Promise也有一些缺点。首先，无法取消Promise，一旦新建它就会
   ES6 的 Proxy 的存在浏览器兼容性问题。
 
 
-  Proxy 和 Reflect 结合实现 Vue3 底层数据劫持原理。Reflect 设计的目的是为了优化 Object 的一些操作方法以及合理的返回 Object 操作返回的结果，对于一些命令式的 Object 行为，Reflect 对象可以将其变为函数式的行为。比如 （'name' in obj） = Reflect.has(obj, 'name')
+  Proxy 和 Reflect 结合实现 Vue3 底层数据劫持原理。
+  Reflect 设计的目的是为了优化 Object 的一些操作方法以及合理的返回 Object 操作返回的结果，
+  对于一些命令式的 Object 行为，Reflect 对象可以将其变为函数式的行为。
+  比如 （'name' in obj） = Reflect.has(obj, 'name')
 
   1.9 Vue3 有什么新特性
-  Vue2.x 的组织代码形式，叫 Options API，而 Vue3 最大的特点是 Composition API 中文名是合成函数：以函数为载体，将业务相关的逻辑代码抽取到一起，整体打包对外提供相应能力。可以理解它是我们组织代码，解决逻辑复用的一种方案。
-  其中 setup 是 Composition API 的入口函数，是在 beforeCreate 声明周期函数之前执行的。还提供了 ref 函数定义一个响应式的数据，reactive 函数定义多个数据的响应式等等。
+  Vue2.x 的组织代码形式，叫 Options API，而 Vue3 最大的特点是 Composition API 中文名是合成函数：
+  以函数为载体，将业务相关的逻辑代码抽取到一起，整体打包对外提供相应能力。
+  可以理解它是我们组织代码，解决逻辑复用的一种方案。
+  其中 setup 是 Composition API 的入口函数，是在 beforeCreate 声明周期函数之前执行的。
+  还提供了 ref 函数定义一个响应式的数据，reactive 函数定义多个数据的响应式等等。
   61. v-model原理
    
    v-model其实是个语法糖，它实际上是做了两步动作：
@@ -858,12 +889,23 @@ Promise也有一些缺点。首先，无法取消Promise，一旦新建它就会
         
         input type="text" :value="username" @input="username=$event.target.value"
 
-  62. diff算法
-  63. nextTick原理
-  64. template原理
-  65. v指令
-    v-for , v-if, v-else, v-show, v-once, v-self, v-
-  66. vuex原理
+  62. nextTick原理
+      Vue是异步更新队列，$nextTick是用来知道什么时候DOM更新完成的
+
+      Vue在观察到数据变化时并不是直接更新DOM，而是开启一个队列，并缓冲在同一个事件
+      循环中发生的所以数据改变。在缓冲时会去除重复数据，从而避免不必要的计算和DOM操作。然后，
+      在下一个事件循环tick中，Vue刷新队列并执行实际（已去重的）工作。所以如果你用一个for循环来动态改变数据100次，
+      其实它只会应用最后一次改变，如果没有这种机制，DOM就要重绘100次，这固然是一个很大的开销。
+
+  63. template原理
+  64. v指令
+    v-for , v-if, v-else, v-show, v-on, v-bind
+
+    v-pre：跳过这个元素和它的子元素的编译过程。可以用来显示原始 Mustache 标签。跳过大量没有指令的节点会加快编译。
+
+    v-once：只渲染元素和组件一次。随后的重新渲染，元素/组件及其所有的子节点将被视为静态内容并跳过。这可以用于优化更新性能。
+    
+  65. vuex原理
 ## CSS
   68. href和src的区别
         href表示超文本引用，用在link和a等元素上，href是引用和页面关联，是在当前元素和引用资源之间建立联系，
@@ -873,7 +915,8 @@ Promise也有一些缺点。首先，无法取消Promise，一旦新建它就会
       在请求src资源时会将其指向的资源下载并应用到当前文档中，例如js脚本，img图片和frame等元素。
 
       <script src="js.js"></script>当浏览器解析到这一句的时候会暂停其他资源的下载和处理，直至将该资源加载，
-      编译，执行完毕，图片和框架等元素也是如此，类似于该元素所指向的资源嵌套如当前标签内，这也是为什么要把js饭再底部而不是头部。
+      编译，执行完毕，图片和框架等元素也是如此，类似于该元素所指向的资源嵌套如当前标签内，
+      这也是为什么要把js饭再底部而不是头部。
 
       <link href="common.css" rel="stylesheet"/>当浏览器解析到这一句的时候会识别该文档为css文件，
       会下载并且不会停止对当前文档的处理，这也是为什么建议使用link方式来加载css而不是使用@import。
@@ -903,15 +946,14 @@ Promise也有一些缺点。首先，无法取消Promise，一旦新建它就会
 
 
   71.  BFC是什么
-     BFC是页面中的一块渲染区域，并且有一套渲染规则，它决定了其子元素将如何定位，以及和其他元素的关系和相互作用。
+     BFC可以形成独立渲染区域，内部元素渲染不会影响外界
      具有 BFC 特性的元素可以看作是隔离了的独立容器，容器里面的元素不会在布局上影响到外面的元素，
-     并且 BFC 具有普通容器所没有的一些特性。
 
      如果想要避免外边距的重叠，可以将其放在不同的 BFC 容器中。
 
     BFC应用
 
-    防止margin重叠
+    防止margin重叠，（上下两个盒子垂直方向外边距折叠。给每个盒子都套上一个BFC的父盒子就可以解决外边距折叠）
     清除内部浮动
     自适应两（多）栏布局
     防止字体环绕
@@ -924,34 +966,23 @@ Promise也有一些缺点。首先，无法取消Promise，一旦新建它就会
     display的值为inline-block、table-cell、table-caption
     position的值为absolute、fixed
 
-    BFC的特性
-
-    内部的Box会在垂直方向上一个接一个的放置。
-    垂直方向上的距离由margin决定
-    bfc的区域不会与float的元素区域重叠。
-    计算bfc的高度时，浮动元素也参与计算
-    bfc就是页面上的一个独立容器，容器里面的子元素不会影响外面元素。
-
 
   72.  如何实现精准计时
   
-   requestAnimationFrame 自带函数节流功能，基本可以保证在 16.6 毫秒内只执行一次（不掉帧的情况下），并且该函数的延时效果是精确的，没有其他定时器时间不准的问题，当然你也可以通过该函数来实现 setTimeout。
+   requestAnimationFrame 自带函数节流功能，基本可以保证在 16.6 毫秒内只执行一次（不掉帧的情况下），
+   并且该函数的延时效果是精确的，没有其他定时器时间不准的问题，当然你也可以通过该函数来实现 setTimeout。
 
-
-   ## 前端安全
-
-   DDOS攻击概念：
-
-    利用木桶原理，寻找利用系统应用的瓶颈；阻塞和耗尽；当前问题：用户的带宽小于攻击的规模，噪声访问带宽成为木桶的短板。
-    DDOS预防：用软硬件结合的方式来防御是最有效的
     
   ## nodejs中间件
 
-    Express的中间件，用来实现各种功能，比如cookie解析、日志记录、文件压缩等。对于同一个网络请求，可能同时有多个匹配的中间件，一般顺序执行。而 next() 则是把执行控制权，从上一个中间件，转移到下一个中间件的函数。
+    Express的中间件，用来实现各种功能，比如cookie解析、日志记录、文件压缩等。对于同一个网络请求，
+    可能同时有多个匹配的中间件，一般顺序执行。而 next() 则是把执行控制权，
+    从上一个中间件，转移到下一个中间件的函数。
 
   1.  递归和迭代的区别
   
-    递归（recursion）：递归常被用来描述以自相似方法重复事物的过程，在数学和计算机科学中，指的是在函数定义中使用函数自身的方法。（A调用A）
+    递归（recursion）：递归常被用来描述以自相似方法重复事物的过程，在数学和计算机科学中，
+    指的是在函数定义中使用函数自身的方法。（A调用A）
 
     迭代（iteration）：重复反馈过程的活动，每一次迭代的结果会作为下一次迭代的初始值。（A重复调用B）
 
@@ -971,9 +1002,13 @@ Promise也有一些缺点。首先，无法取消Promise，一旦新建它就会
     (2)、复杂的路由权限设置：比如OA系统、多种角色的权限配置。通常需要后端返回路由列表，前端渲染使用
 
   5.  react组件间传递数据的方式
+   
   6.  scoped的作用是什么，原理是怎么实现的
-      
+   
+       scoped的实现原理：vue通过postcss给每个dom元素添加一个以data-开头的随机自定义属性实现的
+
   7.  webpack多页面是怎么实现
+   
   8.  如何减少webpack打包的大小
 
   9.  白屏时间， 首屏时间如何计算
@@ -992,5 +1027,55 @@ Promise也有一些缺点。首先，无法取消Promise，一旦新建它就会
    
   1.同级对比 2. 根据索引对比 3.深度优先遍历
 
-  11. vue的渲染优先级，会先判断是否有el: "#app"的元素，有则渲染id为app的元素，然后选择是否有template的选项，有则渲染，
-   template选项的字符串，最后寻找是否有render函数，会渲染render函数返回的字符串。优先级render > template > el
+  11. vue的渲染优先级，会先判断是否有el: "#app"的元素，有则渲染id为app的元素，
+  
+  12. 然后选择是否有template的选项，有则渲染，template选项的字符串，最后寻找是否有render函数，
+   会渲染render函数返回的字符串。优先级render > template > el
+
+  13. 浅拷贝 与 深拷贝
+
+      浅拷贝与深拷贝是指 只针对**数组和对象**这种存放在堆内存里的复杂数据类型的复制， 
+      - 浅拷贝只复制指向某个对象的指针，而不复制对象本身，新旧对象还是共享同一块内存。
+      - 但深拷贝会另外创造一个一模一样的对象，新对象跟原对象不共享内存，修改新对象不会改到原对象。
+
+  拓展运算符和解构赋值都是浅拷贝， Object.assign()只深拷贝第一层，更深层都是浅拷贝。  JSON.stringify是深拷贝，
+  但是无法处理函数，日期对象 ,null，正则对象
+
+  最好是使用lodash内的多边界处理的深拷贝
+
+
+
+  # v-on 指令常用修饰符：
+  .stop - 调用 event.stopPropagation()，禁止事件冒泡。
+  .prevent - 调用 event.preventDefault()，阻止事件默认行为。
+  .capture - 添加事件侦听器时使用 capture 模式。
+  .self - 只当事件是从侦听器绑定的元素本身触发时才触发回调。
+  .{keyCode | keyAlias} - 只当事件是从特定键触发时才触发回调。
+  .native - 监听组件根元素的原生事件。
+  .once - 只触发一次回调。
+  .left - (2.2.0) 只当点击鼠标左键时触发。
+  .right - (2.2.0) 只当点击鼠标右键时触发。
+  .middle - (2.2.0) 只当点击鼠标中键时触发。
+  .passive - (2.3.0) 以 { passive: true } 模式添加侦听器
+
+  # v-model 指令常用修饰符：
+  .lazy - 取代 input 监听 change 事件
+  .number - 输入字符串转为数字
+  .trim - 输入首尾空格过滤
+
+  注意： 如果是在自己封装的组件或者是使用一些第三方的UI库时，会发现并不起效果，这时就需要用`·.native修饰符了
+
+
+  vue 兄弟组件传值
+
+  兄弟之间传值有两种方法：
+			 方法一：通过event bus实现
+		具体实现:创建一个空的vue并暴露出去，这个作为公共的bus,即当作两个组件的桥梁，
+    在两个兄弟组件中分别引入刚才创建的bus，在组件A中通过bus.$emit（’自定义事件名’，
+    要发送的值）发送数据，在组件B中通过bus.$on（‘自定义事件名‘,function(v) { //v即为要接收的值 }）接收数据
+
+         方法二：通过vuex实现
+		具体实现：vuex是一个状态管理工具，主要解决大中型复杂项目的数据共享问题，
+    主要包括state,actions,mutations,getters和modules 5个要素，主要流程：
+    组件通过dispatch到 actions，actions是异步操作，再actions中通过commit到mutations，
+    mutations再通过逻辑操作改变state，从而同步到组件，更新其数据状态
