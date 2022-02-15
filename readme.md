@@ -103,12 +103,20 @@
 
     
 4.  Vue数据传递方式
-    1.父组件给子组件传递数据，使用props在子组件接收
-    2.子组件给父组件传递数据，使用this.$emit的方式
-    3.兄弟组件之间使用中央集成总线的方式传递数据，
-    4.在vue2.2版本之后，新增了provide和inject。用于父组件给子或子孙组件传递数据
-    5.使用Vuex
-    6.$children $parents
+    1. 父组件给子组件传递数据，使用props在子组件接收
+    2. 子组件给父组件传递数据，使用this.$emit的方式
+		3. 通过event bus实现
+		具体实现:创建一个空的vue并暴露出去，这个作为公共的bus,即当作两个组件的桥梁，
+    在两个兄弟组件中分别引入刚才创建的bus，在组件A中通过bus.$emit（’自定义事件名’，
+    要发送的值）发送数据，在组件B中通过bus.$on（‘自定义事件名‘,function(v) { //v即为要接收的值 }）接收数据
+    4. 通过vuex实现
+		具体实现：vuex是一个状态管理工具，主要解决大中型复杂项目的数据共享问题，
+    主要包括state,actions,mutations,getters和modules 5个要素，主要流程：
+    组件通过dispatch到 actions，actions是异步操作，再actions中通过commit到mutations，
+    mutations再通过逻辑操作改变state，从而同步到组件，更新其数据状态
+    5. 在vue2.2版本之后，新增了provide和inject。用于父组件给子或子孙组件传递数据
+    6. $children $parents
+    7. 作用域插槽slot,父组件获取子组件用插槽传递来的数据
 
 5.  let var const的区别
     - 从变量声明提升这块： var允许变量提升，（使用 var 声明的变量会被提升到作用域的顶部），后两者在变量声明之前使用的话，
@@ -1009,6 +1017,17 @@ Promise也有一些缺点。首先，无法取消Promise，一旦新建它就会
 
   7.  webpack多页面是怎么实现
    
+      - 在src下新建多个js文件和html模板：
+
+      - 在entry里配置多个入口文件
+
+        entry: {
+          index: './src/index.js',
+          list: './src/list.js',
+        },
+
+      - HtmlWebpackPlugin里配置不同的html页面引用不同的js文件
+  
   8.  如何减少webpack打包的大小
 
   9.  白屏时间， 首屏时间如何计算
@@ -1023,6 +1042,7 @@ Promise也有一些缺点。首先，无法取消Promise，一旦新建它就会
       白屏时间 = domloadng - fetchStart
       console.log('首屏图片加载完成 : ',window.lastImgLoadTime - window.performance.timing.navigationStart); 
       //在最后一张图出来的时候打时间点
+    
   10. dom diff 算法 核心特点
    
   1.同级对比 2. 根据索引对比 3.深度优先遍历
@@ -1043,7 +1063,9 @@ Promise也有一些缺点。首先，无法取消Promise，一旦新建它就会
 
   最好是使用lodash内的多边界处理的深拷贝
 
-
+  14. tree-shaking 中文意思为摇树，webpack5 production生产环境会默认开始，用于优化包的体积，将无用的代码不加进最后的包中，
+   一些没有使用到的方法和属性声明，以及一些不会进入的if语句不会打包进去
+   
 
   # v-on 指令常用修饰符：
   .stop - 调用 event.stopPropagation()，禁止事件冒泡。
@@ -1065,17 +1087,42 @@ Promise也有一些缺点。首先，无法取消Promise，一旦新建它就会
 
   注意： 如果是在自己封装的组件或者是使用一些第三方的UI库时，会发现并不起效果，这时就需要用`·.native修饰符了
 
+  1. html更新了，客户端如何知道需要替换缓存
+      meta标签cahe-control=no-cache
+  2. etag和last-modified优先级哪个更高
+     优先级：Cache-Control>Expires>Etag>Last-modify
 
-  vue 兄弟组件传值
+     Cache-Control单位是秒数
 
-  兄弟之间传值有两种方法：
-			 方法一：通过event bus实现
-		具体实现:创建一个空的vue并暴露出去，这个作为公共的bus,即当作两个组件的桥梁，
-    在两个兄弟组件中分别引入刚才创建的bus，在组件A中通过bus.$emit（’自定义事件名’，
-    要发送的值）发送数据，在组件B中通过bus.$on（‘自定义事件名‘,function(v) { //v即为要接收的值 }）接收数据
+  3. 如何保证你前端项目的稳定性
+   
+  4. 你如何部署一个前端项目
+   
+  5. vue循环中key的作用
 
-         方法二：通过vuex实现
-		具体实现：vuex是一个状态管理工具，主要解决大中型复杂项目的数据共享问题，
-    主要包括state,actions,mutations,getters和modules 5个要素，主要流程：
-    组件通过dispatch到 actions，actions是异步操作，再actions中通过commit到mutations，
-    mutations再通过逻辑操作改变state，从而同步到组件，更新其数据状态
+  6.  css-loader与style-loader的区别
+   
+  7.  url-loader有什么作用
+  8.  SSR的底层原理
+   
+      服务端渲染就是在浏览器请求页面URL的时候，服务端将我们需要的HTML文本组装好，并返回给浏览器，
+      这个HTML文本被浏览器解析之后，不需要经过 JavaScript 脚本的执行，
+      即可直接构建出希望的 DOM 树并展示到页面中。这个服务端组装HTML的过程，叫做服务端渲染。
+
+    好处 
+      1. 为了seo 
+          低级爬虫：只请求URL，URL返回的HTML是什么内容就爬什么内容。
+          高级爬虫：请求URL，加载并执行JavaScript脚本渲染页面，爬JavaScript渲染后的内容。
+          也就是说，低级爬虫对客户端渲染的页面来说，简直无能为力，因为返回的HTML是一个空壳，
+          它需要执行 JavaScript 脚本之后才会渲染真正的页面。而目前像百度、谷歌、微软等公司，
+          有一部分年代老旧的爬虫还属于低级爬虫，使用服务端渲染，对这些低级爬虫更加友好一些。
+      2. 缩减白屏时间
+
+  9.  def async有什么作用
+      script 标签有2个属性 async（异步） 和 defer（推迟）；他们的功能是：
+      
+      async：他是异步加载，不确定何时会加载好；页面加载时，带有 async 的脚本也同时加载，
+      加载后会立即执行，如果有一些需要操作 DOM 的脚本加载比较慢时，这样会造成 DOM 还没有加载好，
+      脚本就进行操作，会造成错误。
+
+      defer：页面加载时，带有 defer 的脚本也同时加载，加载后会等待 页面加载好后，才执行。
