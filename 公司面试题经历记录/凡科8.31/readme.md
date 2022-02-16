@@ -4,6 +4,10 @@
 
 2. js实现一个find函数  
 
+  Array.prototype.myFind = function (key) {
+    return this.indexOf(key) === -1 ? false : this.indexOf(key)
+  }
+
 3. 用深度优先和广度优先遍历一颗dom树结构  
 
 4. 聊聊浏览器跨页面通讯的方式  
