@@ -10,4 +10,4 @@ function myInstanceof(A, B) {
 }
 
 let arr = []
-console.log(myInstanceof(myInstanceof, Array))
+console.log(myInstanceof(arr, Object))
