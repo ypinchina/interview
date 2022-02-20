@@ -246,11 +246,15 @@ Promise也有一些缺点。首先，无法取消Promise，一旦新建它就会
     
     6. GET请求只能进行url编码，而POST支持多种编码方式
 
-23. background-position: x y    0 0 代表左上角，5px -10px代表向右偏移5px,向上偏移10px
+    7. get请求产生一个TCP数据包，post会产生两个tcp数据包（火狐浏览器只产生一个）
+
+    8. get会被浏览器缓存下来，post不会，除非手动设置
+
+1.  background-position: x y    0 0 代表左上角，5px -10px代表向右偏移5px,向上偏移10px
     
-24. box-sizing的默认值： content-box(盒子的高度是独立的,就为height)， border-box(盒子的高度是要加入border宽度和padding的值，即盒子内容的高度 =  height - border-width * 2 - padding-top - padding-bottom)
+2.  box-sizing的默认值： content-box(盒子的高度是独立的,就为height)， border-box(盒子的高度是要加入border宽度和padding的值，即盒子内容的高度 =  height - border-width * 2 - padding-top - padding-bottom)
     
-25. 箭头函数和普通函数有何不同
+3.  箭头函数和普通函数有何不同
 
     1. 箭头函数只能写在匿名函数中，仅是函数表达式的情况。 普通函数则没这个限制，可以是函数声明也可以是函数表达式
     2. 箭头函数不能用new来创建构造函数的实例，普通函数可以（因为箭头函数创建的时候程序不会为它创建construct方法，也就是没有构造能力，用完就丢掉了，不像普通函数重复利用，因此也不需要构造函数原型，也就是不会自动生成prototype属性）
@@ -261,7 +265,7 @@ Promise也有一些缺点。首先，无法取消Promise，一旦新建它就会
     7. 综合箭头函数没有.prototype 属性
     8. 箭头函数不能当做Generator函数,不能使用yield关键字
 
-26. http和https
+4.  http和https
     
     HTTP：是互联网上应用最为广泛的一种网络协议，是一个客户端和服务器端请求和应答的标准（TCP），用于从WWW服务器传输超文本到本地浏览器的传输协议，它可以使浏览器更加高效，使网络传输减少。
 
@@ -280,7 +284,7 @@ Promise也有一些缺点。首先，无法取消Promise，一旦新建它就会
     　　4、http的连接很简单，是无状态的；HTTPS协议是由SSL+HTTP协议构建的可进行加密传输、
     身份认证的网络协议，比http协议安全。
 
-27. http 0.9 http1.0 1.1和2.0 3.0
+5.  http 0.9 http1.0 1.1和2.0 3.0
 
     1.1是keep-alive长连接
 
@@ -288,7 +292,7 @@ Promise也有一些缺点。首先，无法取消Promise，一旦新建它就会
 
     3.0 使用QUIC协议传输
 
-28. tcp和udp
+6.  tcp和udp
     
     TCP是面向链接的，而UDP是面向无连接的。
     TCP仅支持单播传输，UDP 提供了单播，多播，广播的功能。
@@ -296,7 +300,7 @@ Promise也有一些缺点。首先，无法取消Promise，一旦新建它就会
     首先不可靠性体现在无连接上，通信都不需要建立连接，对接收到的数据也不发送确认信号，
     发送端不知道数据是否会正确接收。UDP的头部开销比TCP的更小，数据传输速率更高，实时性更好。
 
-29. 三次握手
+7.  三次握手
     
   - 第一次：建立连接时，客户端发送SYN包(syn=j)到服务器，并进入SYN_SEND状态，等待服务器确认；
 
