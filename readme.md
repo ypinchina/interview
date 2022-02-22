@@ -64,7 +64,7 @@
    
     a. 浏览器请求资源时首先命中资源的Expires 和 Cache-Control，Expires 受限于本地时间，如果修改了本地时间，可能会造成缓存失效，可以通过Cache-control: max-age指定最大生命周期，状态仍然返回200，但不会请求数据，在浏览器中能明显看到from cache字样。
 
-    b. 强缓存失效，进入协商缓存阶段，首先验证ETag ETag可以保证每一个资源是唯一的，资源变化都会导致ETag变化。服务器根据客户端上送的If-None-Match值来判断是否命中缓存。
+    b. 强缓存失效，进入协商缓存阶段，首先验证ETag ETag可以保证每一个资源是唯一的，资源变化都会导致ETag变化。服务器根据客户端上发送的If-None-Match值来判断是否命中缓存。
 
     c. 协商缓存Last-Modify/If-Modify-Since阶段，客户端第一次请求资源时，服务服返回的header中会加上Last-Modify，Last-modify是一个时间标识该资源的最后修改时间。再次请求该资源时，request的请求头中会包含If-Modify-Since，该值为缓存之前返回的Last-Modify。服务器收到If-Modify-Since后，根据资源的最后修改时间判断是否命中缓存。
 
@@ -116,9 +116,9 @@
 
     
 4.  Vue数据传递方式
-    1. 父组件给子组件传递数据，父组件用v-model一个属性值放在子组件上，使用props在子组件接收
+    1. 父组件给子组件传递数据，使用props在子组件接收
     2. 子组件给父组件传递数据，使用this.$emit的方式
-		3. 通过event bus实现
+		1. 通过event bus实现
 		具体实现:创建一个空的vue并暴露出去，这个作为公共的bus,即当作两个组件的桥梁，
     在两个兄弟组件中分别引入刚才创建的bus，在组件A中通过bus.$emit（’自定义事件名’，
     要发送的值）发送数据，在组件B中通过bus.$on（‘自定义事件名‘,function(v) { //v即为要接收的值 }）接收数据
@@ -387,6 +387,8 @@ Promise也有一些缺点。首先，无法取消Promise，一旦新建它就会
     flex 是 Flexible Box 的缩写，意为"弹性布局"，用来为盒状模型提供最大的灵活性
 
     flex 1是什么含义？
+
+      flex: 1; === flex: 1 1 auto;
 
     flex属性 是 flex-grow、flex-shrink、flex-basis三个属性的缩写。
 
@@ -1175,7 +1177,7 @@ Promise也有一些缺点。首先，无法取消Promise，一旦新建它就会
       1. [] instanceof Array
       2. [].constructor === Array
       3. Array.isArray([])
-      4. [].prototype.toString.call() === 'array'
+      4. Object.prototype.toString.call(要判断的对象) === 'array'
       最安全是后两个，不会被修改结果
   
   12. 
@@ -1228,8 +1230,6 @@ plugins：插件。plugins 与 loader 的区别在于，loader 只是一个解�
 比如将 ES5 解析成 ES6，LESS 文件解析成 CSS 文件，为了兼容浏览器。
 而 plugins 是将 loader 之后的文件进行优化分类、压缩、提供公共代码等。
 
-devServer：服务器配置，contentBase 文件路径，compress 是否启动 gzip 压缩
-，host 主机地址，port 端口号，publicPath。
 
 * cli -----   command line interface 命令行界面
   
