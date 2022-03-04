@@ -4,17 +4,12 @@
 
 2. js实现一个find函数  
 
-  Array.prototype.myFind = function (key) {
-    return this.indexOf(key) === -1 ? false : this.indexOf(key)
-  }
-
 3. 用深度优先和广度优先遍历一颗dom树结构  
 
 4. 聊聊浏览器跨页面通讯的方式  
 
 5. async输出结果的题 考察js异步机制  
 
-7.  讲讲前端使一个元素消失的方式有哪几种，说说之间的区别  
+6.  讲讲前端使一个元素消失的方式有哪几种，说说之间的区别  
 
-6. 还有几道在js代码中阐述  
-  
+7. 实现杨辉三角和斐波那契 
