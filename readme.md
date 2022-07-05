@@ -1138,7 +1138,7 @@ Promise也有一些缺点。首先，无法取消Promise，一旦新建它就会
   6.  css-loader与style-loader的区别
       前者让webpack识别css文件转化为模块，后者将css插入到style标签中使用
   7.  url-loader有什么作用
-      设置图片转base64及转化的灵界点
+      设置图片转base64及转化的临界点
   8.  SSR的底层原理
    
       服务端渲染就是在浏览器请求页面URL的时候，服务端将我们需要的HTML文本组装好，并返回给浏览器，
