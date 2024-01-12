@@ -66,6 +66,22 @@
 
    c. 协商缓存 Last-Modify/If-Modify-Since 阶段，客户端第一次请求资源时，服务器返回的 header 中会加上 Last-Modify，Last-modify 是一个时间标识该资源的最后修改时间。再次请求该资源时，request 的请求头中会包含 If-Modify-Since，该值为缓存之前返回的 Last-Modify。服务器收到 If-Modify-Since 后，根据资源的最后修改时间判断是否命中缓存。
 
+catch-control 是 http 通用首部字段的控制缓存行为字段，可分为缓存请求指令和缓存响应指令
+
+缓存指令：
+
+1. no-cache
+
+客户端请求数据时强制向源服务器发送验证缓存是否过期，返回给客户端的必须是未过期的数据
+
+2. no-store
+
+缓存不能在本地存储请求的任何数据
+
+3. max-age
+
+如果缓存的时间没有超过 max-age 设置的时间，则返回缓存的数据，否则从源服务器请求数据，http1.0 在设置了 expires 字段后会忽略掉此字段，http1.1 相反
+
 4. 强缓存与协商缓存的区别
 
 在 http 中可以通过控制响应头来控制浏览器缓存。分为强缓存和协商缓存，强缓存通过 expires(http1.0) 和
@@ -412,23 +428,22 @@ Promise 也有一些缺点。首先，无法取消 Promise，一旦新建它就�
 
 36. 什么是闭包
 
-
-    函数嵌套函数，内部的函数就是闭包(函数A嵌套函数B，B函数能访问函数A，则函数B则被称为闭包)。
+    函数嵌套函数，内部的函数就是闭包(函数 A 嵌套函数 B，B 函数能访问函数 A，则函数 B 则被称为闭包)。
     在 JS 中，闭包存在的意义就是让我们可以间接访问函数内部的变量。
     三、闭包作用
-    作用1：隐藏变量，避免全局污染
+    作用 1：隐藏变量，避免全局污染
 
-    作用2：可以读取函数内部的变量
+    作用 2：可以读取函数内部的变量
 
     同时闭包使用不当，优点就变成了缺点：
 
-    缺点1：导致变量不会被垃圾回收机制回收，造成内存消耗
+    缺点 1：导致变量不会被垃圾回收机制回收，造成内存消耗
 
-    缺点2：不恰当的使用闭包可能会造成内存泄漏的问题
+    缺点 2：不恰当的使用闭包可能会造成内存泄漏的问题
 
-    这里简单说一下，为什么使用闭包时变量不会被垃圾回收机制收销毁呢，这里需要了解一下JS垃圾回收机制；
+    这里简单说一下，为什么使用闭包时变量不会被垃圾回收机制收销毁呢，这里需要了解一下 JS 垃圾回收机制；
 
-    JS规定在一个函数作用域内，程序执行完以后变量就会被销毁，这样可节省内存；
+    JS 规定在一个函数作用域内，程序执行完以后变量就会被销毁，这样可节省内存；
 
     使用闭包时，按照作用域链的特点，闭包（函数）外面的变量不会被销毁，因为函数会一直被调用，
     所以一直存在，如果闭包使用过多会造成内存销毁。
@@ -525,34 +540,31 @@ passive: ('消极的，被动的') 布尔值，设置为 true 时，表示 liste
     什么是跨域：
     因为浏览器出于安全考虑，有同源策略。也就是说，如果协议、域名或者端口有一个不同就是跨域，Ajax 请求会失败。
 
-
     那么是出于什么安全考虑才会引入这种机制呢？ 其实主要是用来防止 CSRF 攻击的。简单点说，CSRF 攻击是利用用户的登录态发起恶意请求。
 
     也就是说，没有同源策略的情况下，A 网站可以被任意其他来源的 Ajax 访问到内容。如果你当前 A 网站还存在登录态，那么对方就可以通过 Ajax 获得你的任何信息。当然跨域并不能完全阻止 CSRF。
 
+    跨域解决方案： 1.很早以前 大学那会儿有了解过使用 iframe 方案来解决跨域
 
-    跨域解决方案：
-    1.很早以前 大学那会儿有了解过使用iframe方案来解决跨域
+    2.jsonp 解决跨域
 
-    2.jsonp解决跨域
+    JSONP 的原理很简单，就是利用 "script" 标签没有跨域限制的漏洞。通过 "script" 标签指向一个需要访问的地址并提供一个回调函数来接收数据当需要通讯时。
 
-      JSONP 的原理很简单，就是利用 "script" 标签没有跨域限制的漏洞。通过 "script" 标签指向一个需要访问的地址并提供一个回调函数来接收数据当需要通讯时。
-
-    'script src="http://domain/api?param1=a&param2=b&callback=jsonp"  /script'
+    'script src="http://domain/api?param1=a&param2=b&callback=jsonp" /script'
     script
-        function jsonp(data) {
-          console.log(data)
-      }
+    function jsonp(data) {
+    console.log(data)
+    }
     /script
     JSONP 使用简单且兼容性不错，但是只限于 get 请求。
 
     3.cors 后端服务器放行解决跨域
-      服务端设置 Access-Control-Allow-Origin 就可以开启 CORS。
-      该属性表示哪些域名可以访问资源，如果设置通配符（*）则表示所有网站都可以访问资源。
-      以前自己用node后台写过一个博客管理系统的全栈项目里面使用ngixn在配置文件config里面修改过
-    4.proxy代理
-      vue.config.js里配置proxy代理，利用webpack-dev-server 起本地前端的服务，因此 proxyTable 实际上是将请求发给自己的服务器，再由服务器转发给后台服务器，做了一层代理。vue的proxyTable用的是http-proxy-middleware中间件, 因此不会出现跨域问题。
-    5.window.postMessage的安全性
+    服务端设置 Access-Control-Allow-Origin 就可以开启 CORS。
+    该属性表示哪些域名可以访问资源，如果设置通配符（\*）则表示所有网站都可以访问资源。
+    以前自己用 node 后台写过一个博客管理系统的全栈项目里面使用 ngixn 在配置文件 config 里面修改过
+    4.proxy 代理
+    vue.config.js 里配置 proxy 代理，利用 webpack-dev-server 起本地前端的服务，因此 proxyTable 实际上是将请求发给自己的服务器，再由服务器转发给后台服务器，做了一层代理。vue 的 proxyTable 用的是 http-proxy-middleware 中间件, 因此不会出现跨域问题。
+    5.window.postMessage 的安全性
 
 42. 项目中遇到难解决的问题
     在杭州那个主要的项目中，需要实现文件分享，在上传组件中有个批量上传看到各个文件的上传进度条的功能。
@@ -561,106 +573,100 @@ passive: ('消极的，被动的') 布尔值，设置为 true 时，表示 liste
     没有更新进度条，打印出来的值也是对的。然后用了很多方法比如加$set 等。还是无济于事。 这个问题困扰了接近两周，去网上找了各种答案，期间去处理别的问题去了。后来换个很多种搜索博客问题的方式，才找到一篇博客，
     他也是有过类似的问题。原来 files 是 FileList 类型，file 是 File 类型。而普通的 obj 是 Object 类型。
 
-
     Vue 的数据更新利用的是 Object.defineProperty 的 getter setter 函数来实现的，而 Vue 默认没有对 File 对象设置 getter setter, 因此用 File 对象不会自动更新。
 
     解决办法，就是用普通对象保存 file 对象里需要的信息，然后用来构造视图数据。或者自己手动设置 File 对象的 setter，也可以自动更新
 
 43. 浏览器存储
 
-
-    针对cookie、localStorage、sessionStorage,indexDB
+    针对 cookie、localStorage、sessionStorage,indexDB
     对于与服务端通信这方面：
-      只有cookie有对服务端的通信，每次都会携带在 header 中，对于请求性能影响，其他三者不会。导致使用cookies会占用一部分带宽
+    只有 cookie 有对服务端的通信，每次都会携带在 header 中，对于请求性能影响，其他三者不会。导致使用 cookies 会占用一部分带宽
     对于存储量大小来说：
-      cookie为4KB，  两个storage为5M, indexDB为无限
+    cookie 为 4KB， 两个 storage 为 5M, indexDB 为无限
     对于数据生命周期：
-      cookies一般由服务器生成，可以设置过期时间, localStorage和indexDB永久存在除非手动清除，sessionStorage是关闭页面就清除
+    cookies 一般由服务器生成，可以设置过期时间, localStorage 和 indexDB 永久存在除非手动清除，sessionStorage 是关闭页面就清除
 
     cookie, session, token
 
-     cookie是一开始用于给浏览器和服务器通讯的，因为http是无状态的，需要知道哪些用户在登录，将用户名密码保存在浏览器，以便下次可以不输入直接登录，所以需要session保证cookie存储账号密码的安全。只需要cookie保存对应账号密码的sessionId即可，而
-     session Id存储在服务器。但是久而久之服务器存储了太多太多的sessionId,如果服务器突然挂了，就出问题了，如果多个服务器的话又需要各个服务器都要存储所有的session,所以发展到现在是使用JWT(java web token)。 服务器用jwt签名生成的密文发给浏览器，浏览器用cookie或者storage的方式保存。有人会质疑存在用户的token的安全性，jwt是由三部分组成的，header,payload,signature。header部分会声明用什么算法加密，payload存储一些信息比如有效期，然后这两者经过base64编译，然后这两段base64经过header的签名算法得到signature，获得完整jwt
+    cookie 是一开始用于给浏览器和服务器通讯的，因为 http 是无状态的，需要知道哪些用户在登录，将用户名密码保存在浏览器，以便下次可以不输入直接登录，所以需要 session 保证 cookie 存储账号密码的安全。只需要 cookie 保存对应账号密码的 sessionId 即可，而
+    session Id 存储在服务器。但是久而久之服务器存储了太多太多的 sessionId,如果服务器突然挂了，就出问题了，如果多个服务器的话又需要各个服务器都要存储所有的 session,所以发展到现在是使用 JWT(java web token)。 服务器用 jwt 签名生成的密文发给浏览器，浏览器用 cookie 或者 storage 的方式保存。有人会质疑存在用户的 token 的安全性，jwt 是由三部分组成的，header,payload,signature。header 部分会声明用什么算法加密，payload 存储一些信息比如有效期，然后这两者经过 base64 编译，然后这两段 base64 经过 header 的签名算法得到 signature，获得完整 jwt
 
     Service Worker
 
-      Service Worker 是运行在浏览器背后的独立线程，一般可以用来实现缓存功能。
-      使用 Service Worker的话，传输协议必须为 HTTPS。因为 Service Worker 中涉及到请求拦截，
-      所以必须使用 HTTPS 协议来保障安全。F12中Application中能看到Service Worker
+    Service Worker 是运行在浏览器背后的独立线程，一般可以用来实现缓存功能。
+    使用 Service Worker 的话，传输协议必须为 HTTPS。因为 Service Worker 中涉及到请求拦截，
+    所以必须使用 HTTPS 协议来保障安全。F12 中 Application 中能看到 Service Worker
 
 44. vue 中的 mixin 和 mixins 有什么区别
     mixin 用于全局混入，会影响到每个组件实例，通常插件都是这样做初始化的。
 
-
     Vue.mixin({
-        beforeCreate() {
-            // ...逻辑
-            // 这种方式会影响到每个组件的 beforeCreate 钩子函数
-        }
+    beforeCreate() {
+    // ...逻辑
+    // 这种方式会影响到每个组件的 beforeCreate 钩子函数
+    }
     })
     虽然文档不建议我们在应用中直接使用 mixin，但是如果不滥用的话也是很有帮助的，
     比如可以全局混入封装好的 ajax 或者一些工具函数等等。
 
     import 待混入的对象 from ../待混入的对象.js
-    mixins是选择性混入 在组件中写 mixins: [待混入的对象]
+    mixins 是选择性混入 在组件中写 mixins: [待混入的对象]
 
-    1.组件的data，methods优先级高于mixins里面的data,methods
-    2.生命周期函数先执行mixins里的再执行组件里的
+    1.组件的 data，methods 优先级高于 mixins 里面的 data,methods 2.生命周期函数先执行 mixins 里的再执行组件里的
     Mixins：则是在引入组件之后与组件中的对象和方法进行合并，相当于扩展了
     父组件的对象与方法，可以理解为形成了一个新的组件。
 
 45. vue3 的一些笔记：
 
+    setup()在 vue 实例完全初始化之前执行，取不到 this 实例
 
-    setup()在vue实例完全初始化之前执行，取不到this实例
+    1.ref 和 react 方法 都能把非双向数据绑定的数据变双向数据绑定的数据，
+    都是利用 proxy 对象转成双向数据绑定的对象 proxy((key, value: ''))。两者区别是 ref 作用于
+    基本数据类型，后者作用于复杂数据类型，比如 object
 
-    1.ref和react方法 都能把非双向数据绑定的数据变双向数据绑定的数据，
-    都是利用proxy对象转成双向数据绑定的对象proxy((key, value: ''))。两者区别是ref作用于
-    基本数据类型，后者作用于复杂数据类型，比如object
+    为了取响应式对象里的 key-value 普通解构出来的属性是没有响应式的，即使用 react 对象包裹，
+    需要使用 toRefs 包裹才可以赋予解构的响应式。
+    即在原来的 proxy({name: 'Yip'})前 套上 toRefs({name: proxy({name: 'Yip})})
 
-    为了取响应式对象里的key-value 普通解构出来的属性是没有响应式的，即使用react对象包裹，
-    需要使用toRefs包裹才可以赋予解构的响应式。
-    即在原来的proxy({name: 'Yip'})前 套上 toRefs({name: proxy({name: 'Yip})})
+    2.toRefs 与 toRef 的区别
 
-    2.toRefs 与 toRef的区别
-
-    toRefs 用于将响应式对象转换为结果对象，其中结果对象的每个属性都是指向原始对象相应属性的ref。
-    常用于es6的解构赋值操作，因为在对一个响应式对象直接解构时解构后的数据将不再有响应式，
-    而使用toRefs可以方便解决这一问题。
+    toRefs 用于将响应式对象转换为结果对象，其中结果对象的每个属性都是指向原始对象相应属性的 ref。
+    常用于 es6 的解构赋值操作，因为在对一个响应式对象直接解构时解构后的数据将不再有响应式，
+    而使用 toRefs 可以方便解决这一问题。
 
     ·获取数据值的时候需要加.value
-    ·toRefs后的ref数据不是原始数据的拷贝，而是引用，改变结果数据的值也会同时改变原始数据
-    作用其实和 toRef 类似，只不过 toRef 是一个个手动赋值，而    ·toRefs 是自动赋值。
+    ·toRefs 后的 ref 数据不是原始数据的拷贝，而是引用，改变结果数据的值也会同时改变原始数据
+    作用其实和 toRef 类似，只不过 toRef 是一个个手动赋值，而 ·toRefs 是自动赋值。
 
-    3.watch和watchEffect的区别
-    ·watch在生命周期开始第一次不执行（watch的惰性）；watch对象需要传待监听的对象的值；能获取新旧值
-    ·watchEffect立即执行；传参只传入回调函数；不能获取到旧的值
+    3.watch 和 watchEffect 的区别
+    ·watch 在生命周期开始第一次不执行（watch 的惰性）；watch 对象需要传待监听的对象的值；能获取新旧值
+    ·watchEffect 立即执行；传参只传入回调函数；不能获取到旧的值
 
 46. vue 的生命周期
 
-
-    - beforeCreate	Function	在实例初始化之后，数据观测 (data observer)
-    和 event/watcher 事件配置之前被调用。(取不到props和data里的数据)
-    - created	Function	在实例创建完成后被立即调用。在这一步，实例已完成以下的
-    配置：数据观测 (data observer)，  属性和方法的运算，watch/event 事件回调。然而，
-    挂载阶段还没开始，$el 属性目前不可见。(可以取到props和data里的数据)
-    - beforeMount	Function	在挂载开始之前被调用：相关的 render 函数首次被调用。（开始构建虚拟dom）
-    - mounted	Function	el 被新创建的 vm.$el 替换，并挂载到实例上去之后调用该钩子。 (虚拟变真实dom挂载)
+    - beforeCreate Function 在实例初始化之后，数据观测 (data observer)
+      和 event/watcher 事件配置之前被调用。(取不到 props 和 data 里的数据)
+    - created Function 在实例创建完成后被立即调用。在这一步，实例已完成以下的
+      配置：数据观测 (data observer)， 属性和方法的运算，watch/event 事件回调。然而，
+      挂载阶段还没开始，$el 属性目前不可见。(可以取到 props 和 data 里的数据)
+    - beforeMount Function 在挂载开始之前被调用：相关的 render 函数首次被调用。（开始构建虚拟 dom）
+    - mounted Function el 被新创建的 vm.$el 替换，并挂载到实例上去之后调用该钩子。 (虚拟变真实dom挂载)
         如果 root 实例挂载了一个文档内元素，当 mounted 被调用时 vm.$el 也在文档内。
-    - beforeUpdate	Function	数据更新时调用，发生在虚拟 DOM 打补丁之前。
+    - beforeUpdate Function 数据更新时调用，发生在虚拟 DOM 打补丁之前。
       这里适合在更新之前访问现有的 DOM，比如手动移除已添加的事件监听器。该钩子在
       服务器端渲染期间不被调用，因为只有初次渲染会在服务端进行。
-    - updated	Function	由于数据更改导致的虚拟 DOM 重新渲染和打补丁，在这之后会调用该钩子。
-    - activated	Function	keep-alive 组件激活时调用。该钩子在服务器端渲染期间不被调用。
-    - deactivated	Function	keep-alive 组件停用时调用。该钩子在服务器端渲染期间不被调用。
-    - beforeDestroy	Function	实例销毁之前调用。在这一步，实例仍然完全可用。该钩子在服务器端渲染期间不被调用。
-    - destroyed	Function	Vue 实例销毁后调用。调用后，Vue 实例指示的所有东
-        西都会解绑定，所有的事件监听器会被移除，所有的子实例也会被销毁。该钩子在服务器端渲染期间不被调用。
+    - updated Function 由于数据更改导致的虚拟 DOM 重新渲染和打补丁，在这之后会调用该钩子。
+    - activated Function keep-alive 组件激活时调用。该钩子在服务器端渲染期间不被调用。
+    - deactivated Function keep-alive 组件停用时调用。该钩子在服务器端渲染期间不被调用。
+    - beforeDestroy Function 实例销毁之前调用。在这一步，实例仍然完全可用。该钩子在服务器端渲染期间不被调用。
+    - destroyed Function Vue 实例销毁后调用。调用后，Vue 实例指示的所有东
+      西都会解绑定，所有的事件监听器会被移除，所有的子实例也会被销毁。该钩子在服务器端渲染期间不被调用。
 
-    还有两个特殊的生命周期钩子： activated和 deactivated   ，用 keep-alive标签 包裹的组件在切换时
+    还有两个特殊的生命周期钩子： activated 和 deactivated ，用 keep-alive 标签 包裹的组件在切换时
     不会进行销毁，而是缓存到内存中并执行 deactivated 钩子函数，命中缓存渲染后会执行 actived 钩子函数。
 
-1.  keep-alive 组件有什么作用
+47. keep-alive 组件有什么作用
     如果你需要在组件切换的时候，主要用于保留组件状态或避免重新渲染
     与<transition>都是抽象组件
     <keep-alive :include="whiteList" :exclude="blackList" :max="amount">
@@ -669,7 +675,7 @@ passive: ('消极的，被动的') 布尔值，设置为 true 时，表示 liste
     include 定义缓存白名单，keep-alive 会缓存命中的组件；exclude 定义缓存黑名单，
     被命中的组件将不会被缓存；max 定义缓存组件上限，超出上限使用 LRU 的策略置换缓存数据。
 
-2.  callee 和 caller
+48. callee 和 caller
     callee 译名被呼叫者，caller 译名呼叫者
     callee 是 arguments 的属性，用于获取当前的方法，可以用于递归调用时方法名被修改的情况;也可以获取当前
     匿名方法
@@ -693,7 +699,7 @@ passive: ('消极的，被动的') 布尔值，设置为 true 时，表示 liste
     }
     b() // 输出 function b() {}
 
-3.  0.1 + 0.2 = ? 结果如何，为什么，如何纠正?
+49. 0.1 + 0.2 = ? 结果如何，为什么，如何纠正?
 
     在两数相加时，会先转换成二进制，0.1 和 0.2 转换成二进制的时候尾数会发生无限循环，然后进行对阶运算，
     JS 引擎对二进制进行截断，所以造成精度丢失。
@@ -706,8 +712,7 @@ passive: ('消极的，被动的') 布尔值，设置为 true 时，表示 liste
     0.1 + 0.2 = 0.30000000000000004 != 0.3
     parseFloat((0.1 + 0.2).toFixed(10)) === 0.3 // true
 
-4.  webpack 的 loader 是什么 plugins 是什么，两者有什么区别？
-
+50. webpack 的 loader 是什么 plugins 是什么，两者有什么区别？
 
     Loader 本质就是一个函数，在该函数中对接收到的内容进行转换，返回转换后的结果。
 
@@ -722,18 +727,12 @@ passive: ('消极的，被动的') 布尔值，设置为 true 时，表示 liste
 
     Plugin 在 plugins 中单独配置，类型为数组，每一项是一个 Plugin 的实例，参数都通过构造函数传入。
 
-5.  优先级： v-once > v-for > v-if
+51. 优先级： v-once > v-for > v-if
 
-6.  css 优先级是怎么计算的
+52. css 优先级是怎么计算的
 
-
-    第一优先级：!important 会覆盖页面内任何位置的元素样式
-    1.内联样式，如 style="color: green"，权值为 1000
-    2.ID 选择器，如#app，权值为 0100
-    3.类、伪类、属性选择器，如.foo, :first-child, div[class="foo"]，权值为 0010
-    4.标签、伪元素选择器，如 div::first-line，权值为 0001
-    5.通配符、子类选择器、兄弟选择器，如*, >, +，权值为 0000
-    6.继承的样式没有权值
+    第一优先级：!important 会覆盖页面内任何位置的元素样式 1.内联样式，如 style="color: green"，权值为 1000
+    2.ID 选择器，如#app，权值为 0100 3.类、伪类、属性选择器，如.foo, :first-child, div[class="foo"]，权值为 0010 4.标签、伪元素选择器，如 div::first-line，权值为 0001 5.通配符、子类选择器、兄弟选择器，如\*, >, +，权值为 0000 6.继承的样式没有权值
 
 ## 性能优化
 
@@ -745,28 +744,22 @@ passive: ('消极的，被动的') 布尔值，设置为 true 时，表示 liste
 1.  Painting(重绘):根据渲染树以及回流得到的几何信息，得到节点的绝对像素
 1.  Display:将像素发送给 GPU，展示在页面上。
 
-
     回流：
     触发条件：
     当我们对 DOM 结构的修改引发 DOM 几何尺寸变化的时候，会发生回流的过程。
     例如以下操作会触发回流：
 
-
-    一个 DOM 元素的几何属性变化，常见的几何属性有width、height、padding、margin、left、
+    一个 DOM 元素的几何属性变化，常见的几何属性有 width、height、padding、margin、left、
     top、border 等等, 这个很好理解。
-
 
     使 DOM 节点发生增减或者移动。
 
-
-    读写 offset族、scroll族和client族属性的时候，浏览器为了获取这些值，需要进行回流操作。
-
+    读写 offset 族、scroll 族和 client 族属性的时候，浏览器为了获取这些值，需要进行回流操作。
 
     调用 window.getComputedStyle 方法。
 
-
-    回流过程：由于DOM的结构发生了改变，所以需要从生成DOM这一步开始，重新经过样式计算、生成布局树、
-    建立图层树、    再到生成绘制列表以及之后的显示器显示这整一个渲染过程走一遍，开销是非常大的。
+    回流过程：由于 DOM 的结构发生了改变，所以需要从生成 DOM 这一步开始，重新经过样式计算、生成布局树、
+    建立图层树、 再到生成绘制列表以及之后的显示器显示这整一个渲染过程走一遍，开销是非常大的。
 
     重绘：
     触发条件：
@@ -776,14 +769,14 @@ passive: ('消极的，被动的') 布尔值，设置为 true 时，表示 liste
 
     如何避免触发回流和重绘：
 
-    * 避免频繁使用 style，而是采用修改class的方式。
-    * 将动画效果应用到position属性为absolute或fixed的元素上。
-    * 也可以先为元素设置display: none，操作结束后再把它显示出来。因为在display属性为none的元素
-    上进行的DOM操作不会引发回流和重绘
-    * 使用createDocumentFragment进行批量的 DOM 操作。
-    * 对于 resize、scroll 等进行防抖/节流处理。
-    * 避免频繁读取会引发回流/重绘的属性，如果确实需要多次使用，就用一个变量缓存起来。
-    * 利用 CSS3 的transform、opacity、filter这些属性可以实现合成的效果，也就是GPU加速。
+    - 避免频繁使用 style，而是采用修改 class 的方式。
+    - 将动画效果应用到 position 属性为 absolute 或 fixed 的元素上。
+    - 也可以先为元素设置 display: none，操作结束后再把它显示出来。因为在 display 属性为 none 的元素
+      上进行的 DOM 操作不会引发回流和重绘
+    - 使用 createDocumentFragment 进行批量的 DOM 操作。
+    - 对于 resize、scroll 等进行防抖/节流处理。
+    - 避免频繁读取会引发回流/重绘的属性，如果确实需要多次使用，就用一个变量缓存起来。
+    - 利用 CSS3 的 transform、opacity、filter 这些属性可以实现合成的效果，也就是 GPU 加速。
 
 长列表无限加载
 
@@ -943,7 +936,6 @@ v-model 其实是个语法糖，它实际上是做了两步动作：
 64. v 指令
     v-for , v-if, v-else, v-show, v-on, v-bind
 
-
     v-pre：跳过这个元素和它的子元素的编译过程。可以用来显示原始 Mustache 标签。跳过大量没有指令的节点会加快编译。
 
     v-once：只渲染元素和组件一次。随后的重新渲染，元素/组件及其所有的子节点将被视为静态内容并跳过。这可以用于优化更新性能。
@@ -982,12 +974,11 @@ v-model 其实是个语法糖，它实际上是做了两步动作：
 69. flex 布局实现瀑布流
 70. 什么是盒模型
 
+    CSS 盒模型本质上是一个盒子，封装周围的 HTML 元素，它包括：边距 margin，边框 border，填充 padding，
+    和实际内容 content。盒模型允许我们在其它元素和周围元素边框之间的空间放置元素。
 
-     CSS盒模型本质上是一个盒子，封装周围的HTML元素，它包括：边距margin，边框border，填充padding，
-    和实际内容content。盒模型允许我们在其它元素和周围元素边框之间的空间放置元素。
-
-    box-sizing: content-box（W3C盒模型，又名标准盒模型）：元素的宽高大小表现为内容的大小。
-    box-sizing: border-box（IE盒模型，又名怪异盒模型）：元素的宽高表现为内容 + 内边距 + 边框的大小,
+    box-sizing: content-box（W3C 盒模型，又名标准盒模型）：元素的宽高大小表现为内容的大小。
+    box-sizing: border-box（IE 盒模型，又名怪异盒模型）：元素的宽高表现为内容 + 内边距 + 边框的大小,
     背景会延伸到边框的外沿。
 
 71. BFC 是什么
@@ -996,21 +987,20 @@ v-model 其实是个语法糖，它实际上是做了两步动作：
 
     如果想要避免外边距的重叠，可以将其放在不同的 BFC 容器中。
 
+    BFC 应用
 
-    BFC应用
-
-    防止margin重叠，（上下两个盒子垂直方向外边距折叠。给每个盒子都套上一个BFC的父盒子就可以解决外边距折叠）
+    防止 margin 重叠，（上下两个盒子垂直方向外边距折叠。给每个盒子都套上一个 BFC 的父盒子就可以解决外边距折叠）
     清除内部浮动
     自适应两（多）栏布局
     防止字体环绕
 
-    触发BFC条件
+    触发 BFC 条件
 
     根元素
-    float的值不为none
-    overflow的值不为visible
-    display的值为inline-block、table-cell、table-caption
-    position的值为absolute、fixed
+    float 的值不为 none
+    overflow 的值不为 visible
+    display 的值为 inline-block、table-cell、table-caption
+    position 的值为 absolute、fixed
 
 72. 如何实现精准计时
 
@@ -1025,11 +1015,10 @@ requestAnimationFrame 自带函数节流功能，基本可以保证在 16.6 毫�
 
 1.  递归和迭代的区别
 
-
     递归（recursion）：递归常被用来描述以自相似方法重复事物的过程，在数学和计算机科学中，
-    指的是在函数定义中使用函数自身的方法。（A调用A）
+    指的是在函数定义中使用函数自身的方法。（A 调用 A）
 
-    迭代（iteration）：重复反馈过程的活动，每一次迭代的结果会作为下一次迭代的初始值。（A重复调用B）
+    迭代（iteration）：重复反馈过程的活动，每一次迭代的结果会作为下一次迭代的初始值。（A 重复调用 B）
 
 2.  web worker 是什么
 3.  grid 布局你知道吗
@@ -1039,12 +1028,11 @@ requestAnimationFrame 自带函数节流功能，基本可以保证在 16.6 毫�
     2.后台传来当前用户对应权限的路由表，前端通过调接口拿到后处理(后端处理路由)
     后端路由更安全一些
 
-
     动态路由设置一般有两种：
 
     (1)、简单的角色路由设置：比如只涉及到管理员和普通用户的权限。通常直接在前端进行简单的角色权限设置
 
-    (2)、复杂的路由权限设置：比如OA系统、多种角色的权限配置。通常需要后端返回路由列表，前端渲染使用
+    (2)、复杂的路由权限设置：比如 OA 系统、多种角色的权限配置。通常需要后端返回路由列表，前端渲染使用
 
 5.  react 组件间传递数据的方式
 
@@ -1092,9 +1080,8 @@ requestAnimationFrame 自带函数节流功能，基本可以保证在 16.6 毫�
 
     浅拷贝与深拷贝是指 只针对**数组和对象**这种存放在堆内存里的复杂数据类型的复制，
 
-
-      - 浅拷贝只复制指向某个对象的指针，而不复制对象本身，新旧对象还是共享同一块内存。
-      - 但深拷贝会另外创造一个一模一样的对象，新对象跟原对象不共享内存，修改新对象不会改到原对象。
+    - 浅拷贝只复制指向某个对象的指针，而不复制对象本身，新旧对象还是共享同一块内存。
+    - 但深拷贝会另外创造一个一模一样的对象，新对象跟原对象不共享内存，修改新对象不会改到原对象。
 
 拓展运算符和解构赋值都是浅拷贝， Object.assign()只深拷贝第一层，更深层都是浅拷贝。 JSON.stringify 是深拷贝，
 但是无法处理函数，日期对象 ,null，正则对象
@@ -1149,28 +1136,28 @@ requestAnimationFrame 自带函数节流功能，基本可以保证在 16.6 毫�
    这个 HTML 文本被浏览器解析之后，不需要经过 JavaScript 脚本的执行，
    即可直接构建出希望的 DOM 树并展示到页面中。这个服务端组装 HTML 的过程，叫做服务端渲染。
 
+   好处
 
-    好处
-      1. 为了seo
-          低级爬虫：只请求URL，URL返回的HTML是什么内容就爬什么内容。
-          高级爬虫：请求URL，加载并执行JavaScript脚本渲染页面，爬JavaScript渲染后的内容。
-          也就是说，低级爬虫对客户端渲染的页面来说，简直无能为力，因为返回的HTML是一个空壳，
-          它需要执行 JavaScript 脚本之后才会渲染真正的页面。而目前像百度、谷歌、微软等公司，
-          有一部分年代老旧的爬虫还属于低级爬虫，使用服务端渲染，对这些低级爬虫更加友好一些。
-      2. 缩减白屏时间
+   1. 为了 seo
+      低级爬虫：只请求 URL，URL 返回的 HTML 是什么内容就爬什么内容。
+      高级爬虫：请求 URL，加载并执行 JavaScript 脚本渲染页面，爬 JavaScript 渲染后的内容。
+      也就是说，低级爬虫对客户端渲染的页面来说，简直无能为力，因为返回的 HTML 是一个空壳，
+      它需要执行 JavaScript 脚本之后才会渲染真正的页面。而目前像百度、谷歌、微软等公司，
+      有一部分年代老旧的爬虫还属于低级爬虫，使用服务端渲染，对这些低级爬虫更加友好一些。
+   2. 缩减白屏时间
 
-9.  defer async 有什么作用
+9. defer async 有什么作用
 
-    一般情况下，浏览器在加载 html 过程中遇到<script>标签时，会停下来先执行 script 标签内的代码。
+   一般情况下，浏览器在加载 html 过程中遇到<script>标签时，会停下来先执行 script 标签内的代码。
 
-    defer（推迟），和 async（同步）都是只针对<script>标签 src 外部引入脚本的情况，否则建议放 body 标签底部
+   defer（推迟），和 async（同步）都是只针对<script>标签 src 外部引入脚本的情况，否则建议放 body 标签底部
 
-    defer 是异步下载，即不会停止解析 html 文档，但是推迟执行，在 DOM 解析完成前执行
+   defer 是异步下载，即不会停止解析 html 文档，但是推迟执行，在 DOM 解析完成前执行
 
-    async 是异步下载，但是下载完就会执行，也不会停止解析 html 文档。async 适合不会对 DOM 修改的第三方脚本，
-    比如 google 的 analytics
+   async 是异步下载，但是下载完就会执行，也不会停止解析 html 文档。async 适合不会对 DOM 修改的第三方脚本，
+   比如 google 的 analytics
 
-    defer 适合与 DOM 有关联的脚本
+   defer 适合与 DOM 有关联的脚本
 
 10. 如何在未升级 http 协议的情况下打通 http 协议通道限制
     在 http1 下，同一个域名下浏览器给 TCP 打开的通道是 6 个，可以使用**多域名部署**的方式解决这个问题
@@ -1184,10 +1171,7 @@ requestAnimationFrame 自带函数节流功能，基本可以保证在 16.6 毫�
     4. Object.prototype.toString.call(要判断的对象) === 'array'
        最安全是后两个，不会被修改结果
 
-12.
-
-
-    # 防抖(debounce)
+12. # 防抖(debounce)
 
     触发高频事件后 n 秒内函数只会执行一次，如果 n 秒内高频事件再次被触发，则重新计算时间
 
