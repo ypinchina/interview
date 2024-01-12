@@ -62,7 +62,7 @@
 
    a. 浏览器请求资源时首先命中资源的 Expires 和 Cache-Control，Expires 受限于本地时间，如果修改了本地时间，可能会造成缓存失效，可以通过 Cache-control: max-age 指定最大生命周期，状态仍然返回 200，但不会请求数据，在浏览器中能明显看到 from cache 字样。
 
-   b. 强缓存失效，进入协商缓存阶段，首先验证 ETag ETag 可以保证每一个资源是唯一的，资源变化都会导致 ETag 变化。服务器根据客户端上发送的 If-None-Match 值来判断是否命中缓存。
+   b. 强缓存失效，进入协商缓存阶段，首先验证 ETag。 **ETag**可以保证每一个资源是唯一的，资源变化都会导致 ETag 变化。服务器根据客户端上发送的 If-None-Match 值来判断是否命中缓存。
 
    c. 协商缓存 Last-Modify/If-Modify-Since 阶段，客户端第一次请求资源时，服务器返回的 header 中会加上 Last-Modify，Last-modify 是一个时间标识该资源的最后修改时间。再次请求该资源时，request 的请求头中会包含 If-Modify-Since，该值为缓存之前返回的 Last-Modify。服务器收到 If-Modify-Since 后，根据资源的最后修改时间判断是否命中缓存。
 
@@ -85,11 +85,29 @@ catch-control 是 http 通用首部字段的控制缓存行为字段，可分为
 4. 强缓存与协商缓存的区别
 
 在 http 中可以通过控制响应头来控制浏览器缓存。分为强缓存和协商缓存，强缓存通过 expires(http1.0) 和
-Cache-Control(http1.1 优先级更高)中的 max-age 指令来控制。max-age 设置缓存周期，如果在该周期内，
-会直接从客户端缓存获取数据，不会请求服务器协商缓存通过响应头中的 last-modified 和 etag 就行缓存控制，
-每次发送请求时，会进行缓存新鲜度校验，如果资源
-过旧将从响应中获取，否则从客户端缓存中获取。新鲜度校验，是通过请求头中的 if-no-match 与相应头中的 etag 对比，或者
+Cache-Control(http1.1 优先级更高)中的 max-age 指令来控制。max-age 设置缓存周期，如果在该周期内，会直接从客户端缓存获取数据，不会请求服务器；  
+协商缓存通过响应头中的 last-modified 和 etag 进行缓存控制，每次发送请求时，会进行缓存新鲜度校验，如果资源过旧将从响应中获取，否则从客户端缓存中获取。新鲜度校验，是通过请求头中的 if-no-match 与相应头中的 etag 对比，或者
 是将请求头中的 if-modified-since 和响应头中的 last-modified 进行对比
+
+1. Last-Modified / If-Modified-Since
+
+Last-Modified：服务器响应请求时，告诉浏览器资源最后的修改时间。
+
+If-Modified-Since：浏览器再次请求资源时，浏览器通知服务器，上次请求时，返回的资源最后修改时间。
+
+若最后修改时间小于等于 If-Modified-Since，则 response header 返回 304，告知浏览器继续使用所保存的 cache。若大于 If-Modified-Since，则说明资源被改动过，返回状态码 200；
+
+2. If-none-match / Etag
+
+Etag：服务器响应请求时，告诉浏览器当前资源在浏览器的唯一标识（生成规则由服务器确定）
+
+If-None-Match：再次请求服务器时，通过此字段通知服务器客户端缓存数据的唯一标识。服务器收到请求后发现有 If-None-Match 则与被请求资源的唯一标识进行比对，不同，说明资源又被改动过，则响应整片资源内容，返回状态码 200；相同，说明资源无新修改，则响应 HTTP 304，告知浏览器继续使用所保存的 cache。
+
+Etag 与 Last-Modified 对比：
+
+- 在精确度上，Etag 优于 Last-Modified。Last-Modified 精确到 s，如果 1s 内，资源多次改变，Etag 是可以判断出来并返回最新的资源。
+- 在性能上，Last-Modified 优于 Etag，因为 Last-Modified 只需要记录时间，而 Etag 需要服务器重新生成 hash 值，所以性能上略差。
+- 在优先级上，Etag 优于 Last-Modified，Etag 和 Last-Modified 可同时存在。本地缓存时间到期后，浏览器向服务端发送请求报文，其中 Request Header 中包含 If-none-match 和 Last-Modified-Since（与服务端 Etag 和 Last-Modified 对比，Etag 优先级高），用以验证本地缓存数据验证是否与服务端保持一致。在服务器端会优先判断 Etag。如果相同，返回 304；如果不同，就继续比较 Last-Modified，然后决定是否返回新的资源。若服务端验证本地缓存与服务端一致，返回 304，浏览器加载本地缓存；否则，服务器返回请求的资源，同时给出新的 Etag 以及 Last-Modified 时间。
 
 1.  vue 路由有几种模式，有什么区别
 
