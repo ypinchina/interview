@@ -437,11 +437,8 @@ TCP 三次握手 -> client hello -> server hello -> 校验数字证书 -> 客户
             设置后项目将占据固定空间。
 
 35. arguments  
-    在调用函数时，浏览器每次都会传递两个隐含的参数  
-    1. 函数的上下文对象 this  
-    2. 封装实参的对象 arguments  
 
-    - arguments 是一个类数组对象。他可以通过索引来操作数据，也可以获取长度
+    - arguments 是一个类数组对象。代表传给一个function的参数列表。他可以通过索引来操作数据，也可以获取长度
     - 在调用函数时，我们所攒底的实参都会在 arguments 中保存
     - arguments.length 可以用来获取实参的长度
     - 即使不定义形参，也可以通过 arguments 来使用实参，只不过比较麻烦
