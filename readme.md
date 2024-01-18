@@ -501,7 +501,7 @@ TCP 三次握手 -> client hello -> server hello -> 校验数字证书 -> 客户
     1. 宏任务队列出队一个宏任务执行
     2. 执行过程遇到微任务，将微任务放入微任务队列
     3. 执行完一个宏任务后，清空执行完微任务队列的任务
-    4. 渲染GUI 然后返回过程1
+    4. 渲染GUI(graphical user interface) 然后返回过程1
 
     微任务包括 process.nextTick, Promise, Object.observe, MutationObserver。
 
