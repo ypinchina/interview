@@ -6,9 +6,11 @@
 
 1. vue2 与 vue3 的区别
 
-答 1.实现双向数据绑定的方式不一样，vue2 使用 es5 的 Object.definePerporty，vue3 使用 es6 的 Proxy 对象  
- 2.vue3 主要依赖 composition API 函数式编程的写法与 vue2 不一样。vue3 的写法更方便后期代码的维护 3.对 Typescript 的支持不一样，vue3 是使用 typescript 写的，生态上更支持 typescript 4.生命周期的名称不一样
-5.vue3 新增了一些新特性，如组件 template 标签内可以写多个根元素标签(fragment),teleport 传送
+* 实现双向数据绑定的方式不一样，vue2 使用 es5 的 Object.definePerporty，vue3 使用 es6 的 Proxy 对象  
+* vue3 主要依赖 composition API 函数式编程的写法与 vue2 不一样。vue3 的写法更方便后期代码的维护
+* 对 Typescript 的支持不一样，vue3 是使用 typescript 写的，生态上更支持 typescript
+* 生命周期的名称不一样
+* vue3 新增了一些新特性，如组件 template 标签内可以写多个根元素标签(fragment),teleport 传送
 
 1.  setTimeout 底层代码实际执行了什么逻辑  
     答：第二个参数的毫秒数过了之后，将第一个参数内的回调方法放到任务队列等待执行
@@ -496,11 +498,10 @@ TCP 三次握手 -> client hello -> server hello -> 校验数字证书 -> 客户
 
     所以 Event Loop 执行顺序如下所示：
 
-    首先执行同步代码，这属于宏任务
-    当执行完所有同步代码后，执行栈为空，查询是否有异步代码需要执行
-    执行所有微任务
-    当执行完所有微任务后，如有必要会渲染页面
-    然后开始下一轮 Event Loop，执行宏任务中的异步代码，也就是 setTimeout 中的回调函数
+    1. 宏任务队列出队一个宏任务执行
+    2. 执行过程遇到微任务，将微任务放入微任务队列
+    3. 执行完一个宏任务后，清空执行完微任务队列的任务
+    4. 渲染GUI 然后返回过程1
 
     微任务包括 process.nextTick, Promise, Object.observe, MutationObserver。
 
