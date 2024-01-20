@@ -105,6 +105,8 @@ Etag：服务器响应请求时，告诉浏览器当前资源在浏览器的唯�
 
 If-None-Match：再次请求服务器时，通过此字段通知服务器客户端缓存数据的唯一标识。服务器收到请求后发现有 If-None-Match 则与被请求资源的唯一标识进行比对，不同，说明资源又被改动过，则响应整片资源内容，返回状态码 200；相同，说明资源无新修改，则响应 HTTP 304，告知浏览器继续使用所保存的 cache。
 
+![E-Tag](https://img-blog.csdnimg.cn/f873084dca134226b009ba30eb9a1f80.png)
+
 Etag 与 Last-Modified 对比：
 
 - 在精确度上，Etag 优于 Last-Modified。Last-Modified 精确到 s，如果 1s 内，资源多次改变，Etag 是可以判断出来并返回最新的资源。
