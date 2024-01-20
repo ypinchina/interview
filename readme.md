@@ -616,7 +616,7 @@ passive: ('消极的，被动的') 布尔值，设置为 true 时，表示 liste
     cookie, session, token
 
     cookie 是一开始用于给浏览器和服务器通讯的，因为 http 是无状态的，需要知道哪些用户在登录，将用户名密码保存在浏览器，以便下次可以不输入直接登录，所以需要 session 保证 cookie 存储账号密码的安全。只需要 cookie 保存对应账号密码的 sessionId 即可，而
-    session Id 存储在服务器。但是久而久之服务器存储了太多太多的 sessionId,如果服务器突然挂了，就出问题了，如果多个服务器的话又需要各个服务器都要存储所有的 session,所以发展到现在是使用 JWT(java web token)。 服务器用 jwt 签名生成的密文发给浏览器，浏览器用 cookie 或者 storage 的方式保存。有人会质疑存在用户的 token 的安全性，jwt 是由三部分组成的，header,payload,signature。header 部分会声明用什么算法加密，payload 存储一些信息比如有效期，然后这两者经过 base64 编译，然后这两段 base64 经过 header 的签名算法得到 signature，获得完整 jwt
+    session Id 存储在服务器。但是久而久之服务器存储了太多太多的 sessionId,如果服务器突然挂了，就出问题了，如果多个服务器的话又需要各个服务器都要存储所有的 session,所以发展到现在是使用 JWT(java web token)。 服务器用 jwt 签名生成的密文发给浏览器，浏览器用 cookie 或者 storage 的方式保存。JWT 相比与传统的 Session 会话机制，具备无状态性（无需服务器端存储会话信息）, JWT 本质是将秘钥存放在服务器端，并通过某种加密手段进行加密和验证的机制。加密签名=某加密算法(header+payload+服务器端私钥)，因为服务端私钥别人不能获取，所以 JWT 能保证自身其安全性。，jwt 是由三部分组成的，头部（Header）、载荷（Payload）和签名（Signature）。header 部分会声明用什么算法加密，payload 存储一些信息比如有效期，然后这两者经过 base64 编译，然后这两段 base64 经过 header 的签名算法得到 signature，获得完整 jwt
 
     Service Worker
 
