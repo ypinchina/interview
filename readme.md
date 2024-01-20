@@ -99,7 +99,7 @@ If-Modified-Since：浏览器再次请求资源时，浏览器通知服务器，
 
 若最后修改时间小于等于 If-Modified-Since，则 response header 返回 304，告知浏览器继续使用所保存的 cache。若大于 If-Modified-Since，则说明资源被改动过，返回状态码 200；
 
-2. If-none-match / Etag
+2. If-none-match / Etag  
 
 Etag：服务器响应请求时，告诉浏览器当前资源在浏览器的唯一标识（生成规则由服务器确定）
 
