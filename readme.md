@@ -616,7 +616,7 @@ passive: ('消极的，被动的') 布尔值，设置为 true 时，表示 liste
     cookie, session, token
 
     cookie 是一开始用于给浏览器和服务器通讯的，因为 http 是无状态的，需要知道哪些用户在登录，将用户名密码保存在浏览器，以便下次可以不输入直接登录，所以需要 session 保证 cookie 存储账号密码的安全。只需要 cookie 保存对应账号密码的 sessionId 即可，而
-    session Id 存储在服务器。但是久而久之服务器存储了太多太多的 sessionId,如果服务器突然挂了，就出问题了，如果多个服务器的话又需要各个服务器都要存储所有的 session,所以发展到现在是使用 JWT(java web token)。 服务器用 jwt 签名生成的密文发给浏览器，浏览器用 cookie 或者 storage 的方式保存。JWT 相比与传统的 Session 会话机制，具备无状态性（无需服务器端存储会话信息）, JWT 本质是将秘钥存放在服务器端，并通过某种加密手段进行加密和验证的机制。加密签名=某加密算法(header+payload+服务器端私钥)，因为服务端私钥别人不能获取，所以 JWT 能保证自身其安全性。，jwt 是由三部分组成的，头部（Header）、载荷（Payload）和签名（Signature）。header 部分会声明用什么算法加密，payload 存储一些信息比如有效期，然后这两者经过 base64 编译，然后这两段 base64 经过 header 的签名算法得到 signature，获得完整 jwt
+    session Id 存储在服务器。但是久而久之服务器存储了太多太多的 sessionId,如果服务器突然挂了，就出问题了，如果多个服务器的话又需要各个服务器都要存储所有的 session,所以发展到现在是使用 JWT(java web token)。 服务器用 jwt 签名生成的密文发给浏览器，浏览器用 cookie 或者 storage 的方式保存。JWT 相比与传统的 Session 会话机制，具备无状态性（无需服务器端存储会话信息）, JWT 本质是将秘钥存放在服务器端，并通过某种加密手段进行加密和验证的机制。加密签名=某加密算法(header+payload+服务器端私钥)，因为服务端私钥别人不能获取，所以 JWT 能保证自身其安全性。jwt 是由三部分组成的，头部（Header）、载荷（Payload）和签名（Signature）。header 部分会声明用什么算法加密，payload 存储一些信息比如有效期，然后这两者经过 base64 编译，然后这两段 base64 经过 header 的签名算法得到 signature，获得完整 jwt
 
     Service Worker
 
@@ -661,9 +661,11 @@ passive: ('消极的，被动的') 布尔值，设置为 true 时，表示 liste
     常用于 es6 的解构赋值操作，因为在对一个响应式对象直接解构时解构后的数据将不再有响应式，
     而使用 toRefs 可以方便解决这一问题。
 
-    ·获取数据值的时候需要加.value
-    ·toRefs 后的 ref 数据不是原始数据的拷贝，而是引用，改变结果数据的值也会同时改变原始数据
-    作用其实和 toRef 类似，只不过 toRef 是一个个手动赋值，而 ·toRefs 是自动赋值。
+    总结： ref、toRef、toRefs 都可以将某个对象中的属性变成响应式数据  
+    * ref的本质是拷贝，修改响应式数据，不会影响到原始数据，视图会更新
+    * toRef、toRefs的本质是引用，修改响应式数据，会影响到原始数据，视图不会更新
+    * toRef 一次仅能设置一个数据，接收两个参数，第一个参数是哪个对象，第二个参数是对象的哪个属性
+    * toRefs接收一个对象作为参数，它会遍历对象身上的所有属性，然后挨个调用toRef执行
 
     3.watch 和 watchEffect 的区别
     ·watch 在生命周期开始第一次不执行（watch 的惰性）；watch 对象需要传待监听的对象的值；能获取新旧值
@@ -686,8 +688,8 @@ passive: ('消极的，被动的') 布尔值，设置为 true 时，表示 liste
     - activated Function keep-alive 组件激活时调用。该钩子在服务器端渲染期间不被调用。
     - deactivated Function keep-alive 组件停用时调用。该钩子在服务器端渲染期间不被调用。
     - beforeDestroy Function 实例销毁之前调用。在这一步，实例仍然完全可用。该钩子在服务器端渲染期间不被调用。
-    - destroyed Function Vue 实例销毁后调用。调用后，Vue 实例指示的所有东
-      西都会解绑定，所有的事件监听器会被移除，所有的子实例也会被销毁。该钩子在服务器端渲染期间不被调用。
+    - destroyed Function Vue 实例销毁后调用。调用后，Vue 实例指示的所有东西都会解绑定，
+    所有的事件监听器会被移除，所有的子实例也会被销毁。该钩子在服务器端渲染期间不被调用。
 
     还有两个特殊的生命周期钩子： activated 和 deactivated ，用 keep-alive 标签 包裹的组件在切换时
     不会进行销毁，而是缓存到内存中并执行 deactivated 钩子函数，命中缓存渲染后会执行 actived 钩子函数。
@@ -757,8 +759,13 @@ passive: ('消极的，被动的') 布尔值，设置为 true 时，表示 liste
 
 52. css 优先级是怎么计算的
 
-    第一优先级：!important 会覆盖页面内任何位置的元素样式 1.内联样式，如 style="color: green"，权值为 1000
-    2.ID 选择器，如#app，权值为 0100 3.类、伪类、属性选择器，如.foo, :first-child, div[class="foo"]，权值为 0010 4.标签、伪元素选择器，如 div::first-line，权值为 0001 5.通配符、子类选择器、兄弟选择器，如\*, >, +，权值为 0000 6.继承的样式没有权值
+    第一优先级：!important 会覆盖页面内任何位置的元素样式 
+    1. 内联样式，如 style="color: green"，权值为 1000
+    2. ID 选择器，如#app，权值为 0100 
+    3. 类、伪类、属性选择器，如.foo, :first-child, div[class="foo"]，权值为 0010 
+    4. 标签、伪元素选择器，如 div::first-line，权值为 0001 
+    5. 通配符、子类选择器、兄弟选择器，如\*, >, +，权值为 0000 
+    6. 继承的样式没有权值
 
 ## 性能优化
 
