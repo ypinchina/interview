@@ -949,26 +949,26 @@ Vue2.x 的组织代码形式，叫 Options API，而 Vue3 最大的特点是 Com
 其中 setup 是 Composition API 的入口函数，是在 beforeCreate 声明周期函数之前执行的。
 还提供了 ref 函数定义一个响应式的数据，reactive 函数定义多个数据的响应式等等。 
 
-61. v-model 原理
+61. v-model 原理  
 
-v-model 本质上是一颗语法糖，可以用 v-model 指令在表单 <input>、<textarea> 及 <select>元素上创建双向数据绑定。
-- v-model只能应用在表单类元素（输入类元素）上。它实际上是做了两步动作：
-* v-bind：绑定响应式数据
-* 触发oninput 事件并传递数据
-- v-model 在内部为不同的输入元素使用不同的属性并抛出不同的事件：
-* text 和 textarea 元素使用 value 属性和 input 事件；
-* checkbox 和 radio 使用 checked 属性和 change 事件；
-* select 字段将 value 作为 prop 并将 change 作为事件。
+v-model 本质上是一颗语法糖，可以用 v-model 指令在表单 ```<input>、<textarea> ```及 ```<select>```元素上创建双向数据绑定。  
+- v-model只能应用在表单类元素（输入类元素）上。它实际上是做了两步动作：  
+* v-bind：绑定响应式数据  
+* 触发oninput 事件并传递数据  
+- v-model 在内部为不同的输入元素使用不同的属性并抛出不同的事件：  
+* text 和 textarea 元素使用 value 属性和 input 事件；  
+* checkbox 和 radio 使用 checked 属性和 change 事件；  
+* select 字段将 value 作为 prop 并将 change 作为事件。  
 
-62. nextTick 原理
-    Vue 是异步更新队列，$nextTick 是用来知道什么时候 DOM 更新完成的
+62. nextTick 原理  
+    Vue 是异步更新队列，$nextTick 是用来知道什么时候 DOM 更新完成的  
 
-    Vue 在观察到数据变化时并不是直接更新 DOM，而是开启一个队列，并缓冲在同一个事件
-    循环中发生的所以数据改变。在缓冲时会去除重复数据，从而避免不必要的计算和 DOM 操作。然后，
-    在下一个事件循环 tick 中，Vue 刷新队列并执行实际（已去重的）工作。所以如果你用一个 for 循环来动态改变数据 100 次，
-    其实它只会应用最后一次改变，如果没有这种机制，DOM 就要重绘 100 次，这固然是一个很大的开销。
+    Vue 在观察到数据变化时并不是直接更新 DOM，而是开启一个队列，并缓冲在同一个事件  
+    循环中发生的所以数据改变。在缓冲时会去除重复数据，从而避免不必要的计算和 DOM 操作。然后，  
+    在下一个事件循环 tick 中，Vue 刷新队列并执行实际（已去重的）工作。所以如果你用一个 for 循环来动态改变数据 100 次，  
+    其实它只会应用最后一次改变，如果没有这种机制，DOM 就要重绘 100 次，这固然是一个很大的开销。  
 
-64. v 指令
+64. v 指令  
     v-for , v-if, v-else, v-show, v-on, v-bind
 
     v-pre：跳过这个元素和它的子元素的编译过程。可以用来显示原始 Mustache 标签。跳过大量没有指令的节点会加快编译。
