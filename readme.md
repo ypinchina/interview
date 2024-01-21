@@ -1116,7 +1116,7 @@ requestAnimationFrame 自带函数节流功能，基本可以保证在 16.6 毫�
 
 最好是使用 lodash 内的多边界处理的深拷贝
 
-14. tree-shaking 中文意思为摇树，webpack5 production 生产环境会默认开始，用于优化包的体积，将无用的代码不加进最后的包中，
+14. tree-shaking 中文意思为摇树，webpack5 production 生产环境会默认开启，用于优化包的体积，将无用的代码不加进最后的包中，
     一些没有使用到的方法和属性声明，以及一些不会进入的 if 语句不会打包进去
 
 # v-on 指令常用修饰符：
@@ -1148,11 +1148,11 @@ requestAnimationFrame 自带函数节流功能，基本可以保证在 16.6 毫�
 
    Cache-Control 单位是秒数
 
-3. 如何保证你前端项目的稳定性
-
+3. 如何保证你前端项目的稳定性  
+    自动化测试内容  
 4. 你如何部署一个前端项目
-
 5. vue 循环中 key 的作用
+    key属性为了更高效的对比虚拟DOM中每个节点是否是相同节点,⽤来提升v-for渲染的效率  
 
 6. css-loader 与 style-loader 的区别
    前者让 webpack 识别 css 文件转化为模块，后者将 css 插入到 style 标签中使用
