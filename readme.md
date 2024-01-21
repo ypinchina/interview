@@ -743,14 +743,13 @@ passive: ('消极的，被动的') 布尔值，设置为 true 时，表示 liste
 50. webpack 的 loader 是什么 plugins 是什么，两者有什么区别？
 
     Loader 本质就是一个函数，在该函数中对接收到的内容进行转换，返回转换后的结果。
-
     因为 Webpack 只认识 JavaScript，所以 Loader 就成了翻译官，对其他类型的资源进行转译的预处理工作。
 
-    Plugin 就是插件，基于事件流框架 Tapable，插件可以扩展 Webpack 的功能，
+    Plugin 就是插件，插件可以扩展 Webpack 的功能，
     在 Webpack 运行的生命周期中会广播出许多事件，Plugin 可以监听这些事件，
     在合适的时机通过 Webpack 提供的 API 改变输出结果。
 
-    Loader 在 module.rules 中配置，作为模块的解析规则，类型为数组。每一项都是一个 Object，
+    Loader 在 module.rules 中配置，作为模块的解析规则，类型为数组，每一项都是一个 Object（由对象组成的数组），
     内部包含了 test(类型文件)、loader、options (参数)等属性。
 
     Plugin 在 plugins 中单独配置，类型为数组，每一项是一个 Plugin 的实例，参数都通过构造函数传入。
@@ -769,13 +768,13 @@ passive: ('消极的，被动的') 布尔值，设置为 true 时，表示 liste
 
 ## 性能优化
 
-1.  什么是重绘和回流，阻止的方法有什么
+* 什么是重绘和回流，阻止的方法有什么
 
 1.  解析 HTML，生成 DOM 树，解析 CSS，生成 CSS OM（对象模型）树
-1.  将 DOM 树和 CSSOM 树结合，生成渲染树(Render Tree)
-1.  Layout(回流):根据生成的渲染树，进行回流(Layout)，得到节点的几何信息（位置，大小）
-1.  Painting(重绘):根据渲染树以及回流得到的几何信息，得到节点的绝对像素
-1.  Display:将像素发送给 GPU，展示在页面上。
+2.  将 DOM 树和 CSSOM 树结合，生成渲染树(Render Tree)
+3.  Layout(回流):根据生成的渲染树，进行回流(Layout)，得到节点的几何信息（位置，大小）
+4.  Painting(重绘):根据渲染树以及回流得到的几何信息，得到节点的绝对像素
+5.  Display:将像素发送给 GPU，展示在页面上。
 
     回流：
     触发条件：
@@ -860,7 +859,7 @@ passive: ('消极的，被动的') 布尔值，设置为 true 时，表示 liste
 
       简单来说就是它们两者都可以用于遍历，不过 for in 遍历的是数组的索引（index），而 for of 遍历的是数组元素值（value）
 
-      for of 适用遍历数/数组对象/字符串/map/set 等拥有迭代器对象（iterator）的集合，但是不能遍历对象，
+      for of 适用遍历数组/数组对象/字符串/map/set 等拥有迭代器对象（iterator）的集合，但是不能遍历对象，
       因为没有迭代器对象(遍历对象会报错)，但如果想遍历对象的属性，
       你可以用 for in 循环（这也是它的本职工作）或用内建的 Object.keys()方法
 
@@ -948,14 +947,18 @@ Vue2.x 的组织代码形式，叫 Options API，而 Vue3 最大的特点是 Com
 以函数为载体，将业务相关的逻辑代码抽取到一起，整体打包对外提供相应能力。
 可以理解它是我们组织代码，解决逻辑复用的一种方案。
 其中 setup 是 Composition API 的入口函数，是在 beforeCreate 声明周期函数之前执行的。
-还提供了 ref 函数定义一个响应式的数据，reactive 函数定义多个数据的响应式等等。 61. v-model 原理
+还提供了 ref 函数定义一个响应式的数据，reactive 函数定义多个数据的响应式等等。 
 
-v-model 其实是个语法糖，它实际上是做了两步动作：
-1、绑定数据 value
-2、触发输入事件 input
-也就是说，v-model="username"等同于：
+61. v-model 原理
 
-        input type="text" :value="username" @input="username=$event.target.value"
+v-model 本质上是一颗语法糖，可以用 v-model 指令在表单 <input>、<textarea> 及 <select>元素上创建双向数据绑定。
+- v-model只能应用在表单类元素（输入类元素）上。它实际上是做了两步动作：
+* v-bind：绑定响应式数据
+* 触发oninput 事件并传递数据
+- v-model 在内部为不同的输入元素使用不同的属性并抛出不同的事件：
+* text 和 textarea 元素使用 value 属性和 input 事件；
+* checkbox 和 radio 使用 checked 属性和 change 事件；
+* select 字段将 value 作为 prop 并将 change 作为事件。
 
 62. nextTick 原理
     Vue 是异步更新队列，$nextTick 是用来知道什么时候 DOM 更新完成的
@@ -965,15 +968,12 @@ v-model 其实是个语法糖，它实际上是做了两步动作：
     在下一个事件循环 tick 中，Vue 刷新队列并执行实际（已去重的）工作。所以如果你用一个 for 循环来动态改变数据 100 次，
     其实它只会应用最后一次改变，如果没有这种机制，DOM 就要重绘 100 次，这固然是一个很大的开销。
 
-63. template 原理
 64. v 指令
     v-for , v-if, v-else, v-show, v-on, v-bind
 
     v-pre：跳过这个元素和它的子元素的编译过程。可以用来显示原始 Mustache 标签。跳过大量没有指令的节点会加快编译。
 
     v-once：只渲染元素和组件一次。随后的重新渲染，元素/组件及其所有的子节点将被视为静态内容并跳过。这可以用于优化更新性能。
-
-65. vuex 原理
 
 ## CSS
 
@@ -1004,38 +1004,33 @@ v-model 其实是个语法糖，它实际上是做了两步动作：
 
     区别 4：link 支持使用 Javascript 控制 DOM 去改变样式；而@import 不支持。
 
-69. flex 布局实现瀑布流
 70. 什么是盒模型
 
     CSS 盒模型本质上是一个盒子，封装周围的 HTML 元素，它包括：边距 margin，边框 border，填充 padding，
     和实际内容 content。盒模型允许我们在其它元素和周围元素边框之间的空间放置元素。
 
     box-sizing: content-box（W3C 盒模型，又名标准盒模型）：元素的宽高大小表现为内容的大小。
-    box-sizing: border-box（IE 盒模型，又名怪异盒模型）：元素的宽高表现为内容 + 内边距 + 边框的大小,
+    box-sizing: border-box（IE 盒模型，又名怪异盒模型）：元素的宽高表现为内容 + 内边距padding + 边框的大小 border,
     背景会延伸到边框的外沿。
 
-71. BFC 是什么
-    BFC 可以形成独立渲染区域，内部元素渲染不会影响外界
-    具有 BFC 特性的元素可以看作是隔离了的独立容器，容器里面的元素不会在布局上影响到外面的元素，
-
-    如果想要避免外边距的重叠，可以将其放在不同的 BFC 容器中。
-
-    BFC 应用
-
-    防止 margin 重叠，（上下两个盒子垂直方向外边距折叠。给每个盒子都套上一个 BFC 的父盒子就可以解决外边距折叠）
-    清除内部浮动
-    自适应两（多）栏布局
-    防止字体环绕
-
-    触发 BFC 条件
-
-    根元素
-    float 的值不为 none
-    overflow 的值不为 visible
-    display 的值为 inline-block、table-cell、table-caption
-    position 的值为 absolute、fixed
-
-72. 如何实现精准计时
+71. BFC 是什么  
+    BFC(Block formatting context)直译为"块级格式化上下文"。它是一个独立的渲染区域，  
+    只有 Block-level box 参与，它规定了内部的 Block-level Box 如何布局，并且与这个  
+    区 域外部毫不相干  
+    布局规则  
+    1、内部的 Box 会在垂直方向，一个接一个地放置  
+    2、Box 垂直方向的距离由 margin 决定。属于同一个 BFC 的两个相邻 Box 的 margin  
+    会发生重叠  
+    5、BFC 就是页面上的一个隔离的独立容器，容器里面的子元素不会影响到外面的元素。反  
+    之也如此  
+    6、计算 BFC 的高度时，浮动元素也参与计算  
+    哪些元素会生成 BFC：  
+    1、根元素  
+    2、float 属性不为 none  
+    3、position 为 absolute 或 fixed  
+    4、display 为 inline-block， table-cell， table-caption， flex， inline-flex  
+    5、overflow 不为 visible  
+72. 如何实现精准计时  
 
 requestAnimationFrame 自带函数节流功能，基本可以保证在 16.6 毫秒内只执行一次（不掉帧的情况下），
 并且该函数的延时效果是精确的，没有其他定时器时间不准的问题，当然你也可以通过该函数来实现 setTimeout。
