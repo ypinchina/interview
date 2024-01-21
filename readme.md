@@ -1141,40 +1141,40 @@ requestAnimationFrame 自带函数节流功能，基本可以保证在 16.6 毫�
 
 注意：  如果是在自己封装的组件或者是使用一些第三方的 UI 库时，会发现并不起效果，这时就需要用`·.native 修饰符了
 
-1. html 更新了，客户端如何知道需要替换缓存
-   meta 标签 cahe-control=no-cache
-2. etag 和 last-modified 优先级哪个更高
+1. html 更新了，客户端如何知道需要替换缓存  
+   meta 标签 cahe-control=no-cache  
+2. etag 和 last-modified 优先级哪个更高  
    优先级：Cache-Control>Expires>Etag>Last-modify
 
    Cache-Control 单位是秒数
 
 3. 如何保证你前端项目的稳定性  
     自动化测试内容  
-4. 你如何部署一个前端项目
-5. vue 循环中 key 的作用
+4. 你如何部署一个前端项目  
+5. vue 循环中 key 的作用    
     key属性为了更高效的对比虚拟DOM中每个节点是否是相同节点,⽤来提升v-for渲染的效率  
 
-6. css-loader 与 style-loader 的区别
-   前者让 webpack 识别 css 文件转化为模块，后者将 css 插入到 style 标签中使用
-7. url-loader 有什么作用
-   设置图片转 base64 及转化的临界点
-8. SSR 的底层原理
+6. css-loader 与 style-loader 的区别    
+   前者让 webpack 识别 css 文件转化为模块，后者将 css 插入到 style 标签中使用  
+7. url-loader 有什么作用  
+   设置图片转 base64 及转化的临界点  
+8. SSR 的底层原理  
 
-   服务端渲染就是在浏览器请求页面 URL 的时候，服务端将我们需要的 HTML 文本组装好，并返回给浏览器，
-   这个 HTML 文本被浏览器解析之后，不需要经过 JavaScript 脚本的执行，
+   服务端渲染就是在浏览器请求页面 URL 的时候，服务端将我们需要的 HTML 文本组装好，并返回给浏览器，  
+   这个 HTML 文本被浏览器解析之后，不需要经过 JavaScript 脚本的执行，  
    即可直接构建出希望的 DOM 树并展示到页面中。这个服务端组装 HTML 的过程，叫做服务端渲染。
 
    好处
 
-   1. 为了 seo
-      低级爬虫：只请求 URL，URL 返回的 HTML 是什么内容就爬什么内容。
-      高级爬虫：请求 URL，加载并执行 JavaScript 脚本渲染页面，爬 JavaScript 渲染后的内容。
-      也就是说，低级爬虫对客户端渲染的页面来说，简直无能为力，因为返回的 HTML 是一个空壳，
-      它需要执行 JavaScript 脚本之后才会渲染真正的页面。而目前像百度、谷歌、微软等公司，
-      有一部分年代老旧的爬虫还属于低级爬虫，使用服务端渲染，对这些低级爬虫更加友好一些。
-   2. 缩减白屏时间
+   1. 为了 seo  
+      低级爬虫：只请求 URL，URL 返回的 HTML 是什么内容就爬什么内容。  
+      高级爬虫：请求 URL，加载并执行 JavaScript 脚本渲染页面，爬 JavaScript 渲染后的内容。  
+      也就是说，低级爬虫对客户端渲染的页面来说，简直无能为力，因为返回的 HTML 是一个空壳，  
+      它需要执行 JavaScript 脚本之后才会渲染真正的页面。而目前像百度、谷歌、微软等公司，  
+      有一部分年代老旧的爬虫还属于低级爬虫，使用服务端渲染，对这些低级爬虫更加友好一些。  
+   2. 缩减白屏时间  
 
-9. defer async 有什么作用
+9. defer async 有什么作用  
 
    一般情况下，浏览器在加载 html 过程中遇到<script>标签时，会停下来先执行 script 标签内的代码。
 
@@ -1187,7 +1187,7 @@ requestAnimationFrame 自带函数节流功能，基本可以保证在 16.6 毫�
 
    defer 适合与 DOM 有关联的脚本
 
-10. 如何在未升级 http 协议的情况下打通 http 协议通道限制
+10. 如何在未升级 http 协议的情况下打通 http 协议通道限制  
     在 http1 下，同一个域名下浏览器给 TCP 打开的通道是 6 个，可以使用**多域名部署**的方式解决这个问题
     http2 有了多路复用之后，tcp 可以发送多个 http 请求解决了这个问题
 
