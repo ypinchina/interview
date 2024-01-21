@@ -1121,23 +1121,23 @@ requestAnimationFrame 自带函数节流功能，基本可以保证在 16.6 毫�
 
 # v-on 指令常用修饰符：
 
-.stop - 调用 event.stopPropagation()，禁止事件冒泡。
-.prevent - 调用 event.preventDefault()，阻止事件默认行为。
-.capture - 添加事件侦听器时使用 capture 模式。
-.self - 只当事件是从侦听器绑定的元素本身触发时才触发回调。
-.{keyCode | keyAlias} - 只当事件是从特定键触发时才触发回调。
-.native - 监听组件根元素的原生事件。
-.once - 只触发一次回调。
-.left - (2.2.0) 只当点击鼠标左键时触发。
-.right - (2.2.0) 只当点击鼠标右键时触发。
-.middle - (2.2.0) 只当点击鼠标中键时触发。
-.passive - (2.3.0) 以 { passive: true } 模式添加侦听器
+* .stop - 调用 event.stopPropagation()，禁止事件冒泡。
+* .prevent - 调用 event.preventDefault()，阻止事件默认行为。
+* .capture - 添加事件侦听器时使用 capture 模式。
+* .self - 只当事件是从侦听器绑定的元素本身触发时才触发回调。
+* .{keyCode | keyAlias} - 只当事件是从特定键触发时才触发回调。
+* .native - 监听组件根元素的原生事件。
+* .once - 只触发一次回调。
+* .left - (2.2.0) 只当点击鼠标左键时触发。
+* .right - (2.2.0) 只当点击鼠标右键时触发。
+* .middle - (2.2.0) 只当点击鼠标中键时触发。
+* .passive - (2.3.0) 以 { passive: true } 模式添加侦听器
 
 # v-model 指令常用修饰符：
 
-.lazy - 取代 input 监听 change 事件
-.number - 输入字符串转为数字
-.trim - 输入首尾空格过滤
+* .lazy - 取代 input 监听 change 事件
+* .number - 输入字符串转为数字
+* .trim - 输入首尾空格过滤
 
 注意：  如果是在自己封装的组件或者是使用一些第三方的 UI 库时，会发现并不起效果，这时就需要用`·.native 修饰符了
 
