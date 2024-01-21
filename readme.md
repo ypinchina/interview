@@ -1176,9 +1176,9 @@ requestAnimationFrame 自带函数节流功能，基本可以保证在 16.6 毫�
 
 9. defer async 有什么作用  
 
-   一般情况下，浏览器在加载 html 过程中遇到<script>标签时，会停下来先执行 script 标签内的代码。
+   一般情况下，浏览器在加载 html 过程中遇到```<script>```标签时，会停下来先执行 script 标签内的代码。
 
-   defer（推迟），和 async（同步）都是只针对<script>标签 src 外部引入脚本的情况，否则建议放 body 标签底部
+   defer（推迟），和 async（同步）都是只针对```<script>```标签 src 外部引入脚本的情况，否则建议放 body 标签底部
 
    defer 是异步下载，即不会停止解析 html 文档，但是推迟执行，在 DOM 解析完成前执行
 
