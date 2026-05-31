@@ -79,7 +79,7 @@
    - 301 Moved Permanently：永久重定向转移，URL 转移到别的地址
    - 302 Found：暂时重定向转移
    - 304 Not Modified：缓存，服务器已经执行了 GET 请求，文件未发生变化
-   - 307 Temporary Redirect：临时重定向
+  - 307 Temporary Redirect：临时重定向
    - 308 Permanent Redirect：永久重定向
 
 4. **4xx 客户端错误状态码**
@@ -88,9 +88,6 @@
    - 403 Forbidden：服务器理解请求，但拒绝该请求
    - 404 Not Found：请求不到资源
    - 405 Method Not Allowed：请求方法有问题
-   - 406 Not Acceptable：不可接受
-   - 408 Request Timeout：请求超时
-   - 410 Gone：已删除
 
 5. **5xx 服务器错误状态码**
    - 500 Internal Server Error：服务器端问题
@@ -117,6 +114,23 @@
 ### 7. 浏览器缓存运行机制(304 过程)
 
 1. **强缓存**：浏览器请求资源时首先命中资源的 Expires 和 Cache-Control，Expires 受限于本地时间，如果修改了本地时间，可能会造成缓存失效，可以通过 Cache-control: max-age 指定最大生命周期，状态仍然返回 200，但不会请求数据，在浏览器中能明显看到 from cache 字样。
+
+先一句话核心：Expires 是绝对时间，浏览器用「本地当前时间」和「资源的 Expires 时间」对比，判断是否过期
+举个例子
+资源 Expires：2026-05-24 08:00:00 GMT
+现在本地时间：2026-05-24 07:59:00 GMT → 未过期，走缓存
+现在本地时间：2026-05-24 08:01:00 GMT → 过期，重新请求
+Expires 的缺点（为什么现在少用）
+依赖客户端本地时间，用户改时间就失效
+服务器、客户端时区不同，容易出错
+现在主流只用 Cache-Control: max-age，Expires 做兼容兜底
+
+和 Cache-Control: max-age 的区别（必懂）
+Expires：绝对时间，依赖本地系统时间，有缺陷
+Cache-Control: max-age=3600：相对时间
+浏览器用：资源下载时间 + max-age，不依赖本地时间，更准
+优先级：Cache-Control > Expires
+如果两个同时存在，浏览器优先用 max-age，忽略 Expires。
 
 2. **协商缓存**：强缓存失效，进入协商缓存阶段，首先验证 ETag。 **ETag** 可以保证每一个资源是唯一的，资源变化都会导致 ETag 变化。服务器根据客户端上发送的 If-None-Match 值来判断是否命中缓存。
 
@@ -240,7 +254,7 @@ typeof console.log; // 'function'
 
 **补充**：
 
-- 在 Vue3 中，推荐使用 Composition API 的 `provide` 和 `inject` 来进行组件间通信，而不是使用 `$children` 和 `$parent`
+- 在 Vue3 中，推荐使用 Composition API 的 `provide` 和 `inject` 来进行组件间通信，而不是使用 `$children` 和 `$parent`,vue3没有$children了，$parent还在但是容易出问题，不推荐使用
 - 对于复杂的状态管理，推荐使用 Pinia 替代 Vuex，因为 Pinia 提供了更好的 TypeScript 支持和更简洁的 API
 
 ### 13. let、var、const 的区别
@@ -2068,7 +2082,7 @@ async function controller(ctx) {
 我在做博客系统时，就用 Express 中间件做了统一的 JWT 鉴权和错误处理，大大减少了重复代码。"  
 👉 只要说出"解耦"、"责任链"、"插拔式"，面试官就觉得你懂了。
 
-## 🚀 这两个东西怎么帮你拿 30K？
+## 🚀 这两个东西怎么帮你拿高薪？
 
 你不需要手写一个 BFF 框架，也不需要默写洋葱模型代码。  
 你只需要在面试中自然地提到：
@@ -2092,3 +2106,12 @@ async function controller(ctx) {
 **BFF = 前端的小秘书。** 帮前端跑腿、拼数据、挡子弹。让前端只发一个请求就拿到所有数据。  
 **洋葱模型 = 机场安检。** 一层层进去，办完事，再一层层出来。每层只干一件事，互不干扰。  
 你现在的水平：只要知道概念，能说出应用场景，就够了！不用深究源码。
+
+
+
+## FCP LCP TTI
+
+- **FCP (First Contentful Paint)**: 首次内容绘制，指浏览器首次绘制来自DOM的内容的时间点。优化方法包括减少阻塞渲染的资源，如压缩CSS和JS文件、移除未使用的代码等。  （用户首先看到的任何元素，理想值1.8秒内）
+- **LCP (Largest Contentful Paint)**: 最大内容绘制，测量视口内可见的最大内容元素（通常是图片、视频或大块文本）绘制的时间。优化：优化图片大小、使用现代格式如WebP、预加载关键资源（字体） 理想值2.5秒内。
+- **TTI (Time to Interactive)**: 可交互时间，页面变得完全可交互所需的时间，即主线程空闲足够长的时间来处理用户输入。优化：减少主线程阻塞时间、延迟加载非关键JS、使用Web Workers处理耗时任务。 理想值3.8秒内。
+
