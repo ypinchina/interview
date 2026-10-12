@@ -391,7 +391,7 @@ Promise 也有一些缺点：
 
 ### 18. async 函数是什么？
 
-一句话，它就是 Generator 函数的语法糖。
+一句话，它就是结合了 Generator 函数的思想（暂停/状态恢复） + Promise 实现的新时代的异步编程解决方案。
 
 一个函数如果加上 async，那么该函数就会返回一个 Promise：
 
@@ -410,7 +410,6 @@ async function test() {
 }
 ```
 
-async 函数就是将 Generator 函数的星号（\*）替换成 async，将 yield 替换成 await，仅此而已。
 
 **补充**：
 
@@ -444,7 +443,7 @@ async 函数就是将 Generator 函数的星号（\*）替换成 async，将 yie
 
 `background-position: x y`，其中：
 
-- `0 0` 代表左上角
+- `0 0` 代表左上角， 即以左上角为原点，X轴向右为正，Y轴向下为正
 - `5px -10px` 代表向右偏移 5px，向上偏移 10px
 
 **补充**：
@@ -518,12 +517,12 @@ HTTPS 和 HTTP 的区别主要如下：
 
 - **HTTP 1.0**：每次请求都需要建立新的 TCP 连接
 - **HTTP 1.1**：引入了 keep-alive 长连接，复用 TCP 连接
-- **HTTP 2.0**：多路复用、header 压缩、服务器推送等特性，提高了性能
+- **HTTP 2.0**：多路复用、header 压缩、服务器推送（只用于静态资源）等特性，提高了性能
 - **HTTP 3.0**：使用 QUIC 协议，基于 UDP，进一步提高了性能和可靠性
 
 **补充**：
 
-- HTTP/1.0 每次请求都需要建立新的 TCP 连接，而 HTTP/1.1 引入了 keep-alive 长连接，复用 TCP 连接
+- HTTP/1.0 每次请求都需要建立新的 TCP 连接，而 HTTP/1.1 引入了 keep-alive 长连接，复用 TCP 连接（keep-alive长链接就是为了减少 TCP 连接的建立和断开的开销，和全双工的websocket有本质区别）
 - HTTP/2 引入了多路复用、头部压缩、服务器推送等特性，提高了性能
 - HTTP/3 使用 QUIC 协议，基于 UDP，进一步提高了性能和可靠性
 
